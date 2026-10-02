@@ -1,220 +1,485 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- 카카오톡 공유 최적화 -->
-  <title>2026년 춘계 계모임 참석 인원 파악(긴급)</title>
-  <meta property="og:title" content="2026년 춘계 계모임 참석 인원 파악(긴급)" />
-  <meta property="og:description" content="격조 높은 모임을 위해 소중한 응답을 기다립니다." />
-  <meta property="og:type" content="website" />
+  <!-- KakaoTalk & Social Media Open Graph Meta Tags -->
+  <title>2026 오량 형제계 10월 모임 날짜 투표 🍁</title>
+  <meta name="title" content="2026 오량 형제계 10월 모임 날짜 투표 🍁">
+  <meta name="description" content="10월 24일(토) vs 10월 31일(토) 중 참석 가능한 날짜를 선택해 주세요.">
+  
+  <!-- Open Graph / Facebook / KakaoTalk -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hanseokwon.github.io/">
+  <meta property="og:title" content="2026 오량 형제계 10월 모임 날짜 투표 🍁">
+  <meta property="og:description" content="10월 24일(토) vs 10월 31일(토) 중 참석 가능 날짜를 선택해 주세요! (소중한 응답을 기다립니다)">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80">
 
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              900: '#78350f',
+            },
+            deep: {
+              800: '#0f172a',
+              900: '#090d16',
+              950: '#030712'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800&display=swap');
-    
-    body { 
-      font-family: 'Pretendard', sans-serif;
-      background: #f1f5f9; 
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
     }
-    .main-card { 
-      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
-      background: white;
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .header-gradient {
-      background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
-    }
-    .stat-box {
-      border-radius: 1.25rem;
-      transition: all 0.2s ease;
-    }
-    .save-btn {
-      transition: transform 0.1s ease, background-color 0.2s ease;
-    }
-    .save-btn:active { transform: scale(0.96); }
   </style>
 </head>
-<body class="min-h-screen p-4 sm:p-10">
-  <div class="max-w-4xl mx-auto">
-    <!-- 헤더 카드 -->
-    <div class="main-card rounded-[2.5rem] overflow-hidden mb-8">
-      <div class="header-gradient p-8 text-white text-center sm:text-left">
-        <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
-          <div>
-            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">2026 춘계 계모임</h1>
-            <p class="text-blue-100 mt-3 flex items-center justify-center sm:justify-start gap-2 text-lg">
-              📅 <b>2026. 05. 30(토) 12:00</b>
-            </p>
-          </div>
-          <button id="resetAll" class="px-4 py-2 bg-white/10 border border-white/20 rounded-full text-xs hover:bg-white/20 transition-all">관리자 메뉴</button>
-        </div>
-      </div>
+<body class="bg-slate-950 text-slate-100 min-h-screen pb-16 selection:bg-amber-500 selection:text-slate-950">
 
-      <!-- 통계 대시보드 -->
-      <div class="grid grid-cols-3 gap-4 p-8 bg-white border-b border-slate-100">
-        <div class="stat-box bg-blue-50 p-5 text-center">
-          <p class="text-[11px] font-bold text-blue-500 uppercase mb-2">참석 명수</p>
-          <p class="text-2xl font-black text-blue-900"><span id="attendCount">0</span>명 <span class="text-slate-300 text-sm">/</span> <span id="totalPeople" class="text-slate-400 font-normal">0</span></p>
-        </div>
-        <div class="stat-box bg-rose-50 p-5 text-center">
-          <p class="text-[11px] font-bold text-rose-500 uppercase mb-2">불참 인원</p>
-          <p id="absentCount" class="text-2xl font-black text-rose-900">0</p>
-        </div>
-        <div class="stat-box bg-slate-50 p-5 text-center">
-          <p class="text-[11px] font-bold text-slate-500 uppercase mb-2">미응답</p>
-          <p id="pendingCount" class="text-2xl font-black text-slate-900">0</p>
-        </div>
-      </div>
-
-      <!-- 명단 리스트 -->
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <tbody id="memberBody" class="divide-y divide-slate-100">
-            <!-- 자바스크립트 로딩 -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- 하단 안내문 -->
-    <div class="bg-slate-800 text-slate-300 p-8 rounded-[2rem] text-sm leading-relaxed shadow-xl">
-      <p class="flex items-center gap-2 mb-2 text-white font-bold"><span class="text-yellow-400">●</span> 필독 안내사항</p>
-      <p>• 원활한 예약을 위해 <b>5월 15일까지</b> 응답해 주시기 바랍니다.</p>
-      <p>• 참석 시 동반 인원을 포함한 총 인원을 숫자로 입력해 주세요.</p>
-      <p class="mt-4 text-xs text-slate-500">※ 본 시스템은 개인별 실시간 데이터베이스와 동기화됩니다.</p>
-    </div>
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 bg-slate-900/95 text-amber-400 px-6 py-3.5 rounded-2xl shadow-2xl border border-amber-500/30 text-sm font-bold opacity-0 pointer-events-none transition-all duration-300 transform -translate-y-4 z-50 flex items-center gap-3">
+    <span class="text-base" id="toastIcon">✨</span>
+    <span id="toastMsg">처리되었습니다!</span>
   </div>
 
-  <script type="module">
-    const DEADLINE = '2026-05-15'; 
-    const CHOSEN_LS = 'meet2026_premium_key'; 
-    const COL = 'meeting-data-2026'; 
+  <!-- Header Banner Section -->
+  <header class="relative overflow-hidden bg-gradient-to-b from-amber-950/40 via-slate-900 to-slate-950 border-b border-slate-800/80 pt-10 pb-12 px-4 sm:px-6 text-center">
+    <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-    const today = new Intl.DateTimeFormat('sv-SE', {
-      timeZone:'Asia/Seoul', year:'numeric', month:'2-digit', day:'2-digit'
-    }).format(new Date());
+    <div class="max-w-3xl mx-auto relative z-10">
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold mb-4 shadow-sm">
+        <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+        <span>2026년 10월 정기 모임 날짜 투표</span>
+      </div>
 
-    const firebaseConfig = {
-      apiKey: "", // 환경에서 자동 제공
-      authDomain: "meet2025-2f126.firebaseapp.com",
-      projectId: "meet2025-2f126",
-      storageBucket: "meet2025-2f126.firebasestorage.app",
-      messagingSenderId: "908909912507",
-      appId: "1:908909912507:web:de10a11c099c9754c6385e"
-    };
+      <!-- Main Title -->
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-3 leading-tight">
+        2026 <span class="bg-gradient-to-r from-amber-200 via-amber-400 to-orange-400 bg-clip-text text-transparent">오량 형제계</span> 모임
+      </h1>
+      
+      <!-- Subtitle -->
+      <p class="text-slate-300 text-sm sm:text-base font-medium max-w-xl mx-auto leading-relaxed">
+        반가운 오량 형제님들! 🍁 10월 모임 추천 날짜 <strong class="text-amber-300 font-bold">10월 24일(토)</strong>과 <strong class="text-amber-300 font-bold">10월 31일(토)</strong> 중<br class="hidden sm:inline">
+        참석이 더 편하신 날짜에 투표해 주세요!
+      </p>
 
-    const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js');
-    const { getFirestore, doc, setDoc, onSnapshot, writeBatch } = await import('https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js');
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+      <!-- Action Quick Bar -->
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3 text-xs">
+        <button onclick="shareKakao()" class="bg-yellow-400 hover:bg-yellow-300 text-slate-950 px-4 py-2 rounded-xl font-bold transition flex items-center gap-1.5 shadow-md shadow-yellow-500/10 active:scale-95">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 3.185-9 7.115 0 2.557 1.707 4.8 4.27 6.054-.188.702-.682 2.545-.78 2.94-.123.498.182.49.383.357.158-.105 2.511-1.702 3.528-2.392.527.077 1.066.118 1.599.118 4.97 0 9-3.185 9-7.115S16.97 3 12 3z"/></svg>
+          카톡 공유하기
+        </button>
+        <button onclick="copyLink()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-4 py-2 rounded-xl font-semibold transition flex items-center gap-1.5 active:scale-95">
+          🔗 링크 복사
+        </button>
+        <button onclick="scrollToResults()" class="bg-amber-900/40 hover:bg-amber-900/60 text-amber-200 border border-amber-700/50 px-4 py-2 rounded-xl font-semibold transition flex items-center gap-1.5">
+          📊 현황 확인
+        </button>
+      </div>
+    </div>
+  </header>
 
-    const members = [
-      { id: 1, name: '이경득' }, { id: 2, name: '이경률' }, { id: 3, name: '김주식' }, { id: 4, name: '이경석' },
-      { id: 5, name: '반병주' }, { id: 6, name: '정성대' }, { id: 7, name: '이경호' }, { id: 8, name: '김금순' },
-      { id: 9, name: '이재성' }, { id: 10, name: '이동관' }, { id: 11, name: '한석원' }, { id: 12, name: '강양수' },
-      { id: 13, name: '황두호' }, { id: 14, name: '이성근' }, { id: 15, name: '이경수' }, { id: 16, name: '이경철' }
+  <!-- Main Container -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 mt-8 space-y-8">
+
+    <!-- Best Option Highlight Card -->
+    <div id="topDateCard" class="glass-card rounded-3xl p-5 sm:p-6 border border-amber-500/30 bg-gradient-to-r from-slate-900 via-amber-950/20 to-slate-900 relative overflow-hidden shadow-xl">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-slate-950 font-black text-2xl shadow-lg shadow-amber-500/20 shrink-0">
+            👑
+          </div>
+          <div>
+            <div class="text-xs font-bold text-amber-400 uppercase tracking-wider">현재 우세한 모임 날짜</div>
+            <h3 id="bestDateText" class="text-lg sm:text-xl font-extrabold text-white mt-0.5">
+              10월 24일(토) & 10월 31일(토)
+            </h3>
+          </div>
+        </div>
+        <div class="text-right sm:text-right w-full sm:w-auto border-t sm:border-t-0 border-slate-800 pt-3 sm:pt-0">
+          <span id="totalVotersBadge" class="inline-block px-3 py-1 rounded-full bg-slate-800 text-slate-300 text-xs font-bold">
+            총 0명 참가 중
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 Candidate Dates Comparison Banner Card -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="glass-card rounded-2xl p-5 border border-amber-500/30 bg-gradient-to-br from-amber-950/20 to-slate-900 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-black border border-amber-500/30">후보 1</span>
+          <span class="text-xs font-bold text-slate-400">토요일</span>
+        </div>
+        <div class="text-2xl font-black text-white">🗓️ 10월 24일 (토)</div>
+        <p class="text-xs text-slate-300">10월 4째주 토요일 모임</p>
+      </div>
+
+      <div class="glass-card rounded-2xl p-5 border border-amber-500/30 bg-gradient-to-br from-amber-950/20 to-slate-900 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-black border border-amber-500/30">후보 2</span>
+          <span class="text-xs font-bold text-slate-400">토요일</span>
+        </div>
+        <div class="text-2xl font-black text-white">🗓️ 10월 31일 (토)</div>
+        <p class="text-xs text-slate-300">10월 마지막 토요일 (말일 모임)</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Voting Form (Left 7 Cols) -->
+      <section class="lg:col-span-7 glass-card rounded-3xl p-6 sm:p-7 shadow-2xl space-y-6">
+        <div class="border-b border-slate-800 pb-4 flex items-center justify-between">
+          <h2 class="text-xl font-bold text-white flex items-center gap-2.5">
+            <span class="p-2 rounded-xl bg-amber-500/10 text-amber-400 text-base">✍️</span>
+            투표하기
+          </h2>
+          <span class="text-xs text-amber-400 font-medium">* 택일 또는 복수선택</span>
+        </div>
+
+        <form id="voteForm" onsubmit="handleVoteSubmit(event)" class="space-y-6">
+          
+          <!-- Name Input -->
+          <div>
+            <label for="memberName" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+              형제님 성함 <span class="text-amber-400">*</span>
+            </label>
+            <input type="text" id="memberName" required placeholder="예: 한석원" 
+              class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl px-4 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 text-sm font-semibold transition">
+          </div>
+
+          <!-- Date Options Grid -->
+          <div>
+            <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">
+              참석 가능 날짜 선택 <span class="text-amber-400">*</span>
+            </label>
+            
+            <div class="space-y-3" id="dateOptionsContainer">
+              <!-- Dynamically inserted -->
+            </div>
+          </div>
+
+          <!-- Comment Input -->
+          <div>
+            <label for="memberComment" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+              선호 장소 / 한줄 의견 <span class="text-slate-500 font-normal">(선택)</span>
+            </label>
+            <input type="text" id="memberComment" placeholder="예: 10월 31일 주말 권장합니다!" 
+              class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 text-sm transition">
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" 
+            class="w-full bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-extrabold text-base py-4 rounded-2xl shadow-xl shadow-amber-500/20 hover:shadow-amber-500/30 transition transform active:scale-[0.99] flex items-center justify-center gap-2">
+            <span>✨</span>
+            <span>투표 제출하기</span>
+          </button>
+        </form>
+      </section>
+
+      <!-- Live Vote Summary (Right 5 Cols) -->
+      <section id="resultsSection" class="lg:col-span-5 glass-card rounded-3xl p-6 sm:p-7 shadow-2xl space-y-6">
+        <div class="border-b border-slate-800 pb-4 flex items-center justify-between">
+          <h2 class="text-xl font-bold text-white flex items-center gap-2.5">
+            <span class="p-2 rounded-xl bg-amber-500/10 text-amber-400 text-base">📊</span>
+            실시간 투표 현황
+          </h2>
+        </div>
+
+        <!-- Tally Progress List -->
+        <div id="voteTallyList" class="space-y-4">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Member Responses -->
+        <div class="pt-4 border-t border-slate-800/80">
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center justify-between">
+            <span>참여한 멤버 (<span id="voterCount">0</span>명)</span>
+            <button onclick="resetData()" class="text-slate-500 hover:text-slate-300 text-[11px] underline">초기화</button>
+          </h3>
+          <div id="voterFeed" class="space-y-2.5 max-h-64 overflow-y-auto pr-1 text-xs">
+            <!-- Member chips dynamically inserted -->
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- KakaoTalk Preview Card Simulator -->
+    <section class="glass-card rounded-3xl p-6 sm:p-7 border border-slate-800">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-sm font-bold text-amber-400 flex items-center gap-2">
+          <span>📱</span> 카카오톡 공유 시 미리보기 (Preview Card)
+        </h3>
+        <span class="text-xs text-slate-500">hanseokwon.github.io 배포 카드</span>
+      </div>
+
+      <div class="max-w-sm bg-white rounded-2xl overflow-hidden shadow-2xl border border-slate-200 text-slate-900 p-3.5 space-y-2.5">
+        <div class="relative h-32 rounded-xl overflow-hidden bg-slate-800">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" alt="가을 배경" class="w-full h-full object-cover opacity-85">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent flex items-end p-3">
+            <span class="text-white text-xs font-black tracking-wide bg-amber-600/90 px-2 py-0.5 rounded">2026 오량 형제계</span>
+          </div>
+        </div>
+        <div class="px-1 space-y-1">
+          <div class="font-extrabold text-sm text-slate-900 leading-snug">
+            2026 오량 형제계 10월 모임 날짜 투표 🍁
+          </div>
+          <div class="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+            10월 24일(토) vs 10월 31일(토) 중 참석 가능한 날짜를 선택해 주세요! (소중한 응답을 기다립니다)
+          </div>
+          <div class="text-[11px] text-slate-400 font-medium pt-1 border-t border-slate-100">
+            hanseokwon.github.io
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="mt-16 text-center text-xs text-slate-500 font-medium">
+    <p>2026 오량 형제계 모임 안내 웹사이트 | hanseokwon.github.io</p>
+  </footer>
+
+  <script>
+    const DATES = [
+      { id: 'd24', label: '10월 24일 (토요일)', note: '1차 추천 주말 모임 🔥', highlight: true },
+      { id: 'd31', label: '10월 31일 (토요일)', note: '2차 추천 주말 모임 🔥 (10월 말일)', highlight: true },
+      { id: 'd_all', label: '✨ 둘 다 가능 (상관없음)', note: '10/24, 10/31 둘 다 괜찮습니다!', highlight: false },
+      { id: 'd_none', label: '😭 둘 다 참석 어려움', note: '이번 10월 모임 아쉽게 불참', highlight: false },
     ];
 
-    const dbMap = {};
-    const memberBody = document.getElementById('memberBody');
+    const SAMPLE_VOTES = [
+      { name: '한석원', dates: ['d24', 'd31'], comment: '둘 다 참석 가능합니다!' },
+      { name: '오량회원 A', dates: ['d31'], comment: '10월 31일 토요일 선호합니다' },
+      { name: '오량회원 B', dates: ['d24'], comment: '10월 24일 토요일이 좋습니다' },
+    ];
 
-    function renderRows(){
-      memberBody.innerHTML = '';
-      const chosen = localStorage.getItem(CHOSEN_LS);
-
-      members.forEach((m, idx)=>{
-        const d = dbMap[m.id] || {};
-        const isSubmitted = !!d.lastSubmitted;
-        const isPastDeadline = today > DEADLINE;
-        
-        // 본인 행은 마감 전까지 수정 가능토록 열어둠 (다른 행만 잠금)
-        const isLocked = (chosen && Number(chosen) !== m.id) || isPastDeadline;
-
-        const tr = document.createElement('tr');
-        tr.className = `group ${isLocked ? 'bg-slate-50/50' : 'bg-white hover:bg-blue-50/30'}`;
-        
-        // 버튼 텍스트 설정: 본인 행이 제출된 상태면 '수정' 표시
-        const btnText = (isSubmitted && !isLocked) ? '수정' : (isSubmitted ? '완료' : '확인');
-
-        tr.innerHTML = `
-          <td class="px-6 py-6 font-bold text-slate-800 text-lg">${m.name}</td>
-          <td class="px-2 py-6">
-            <select class="w-full border-slate-200 rounded-xl px-3 py-3 text-sm focus:ring-2 focus:ring-blue-500" ${isLocked ? 'disabled' : ''}>
-              <option value="">참석 여부</option>
-              <option value="참석" ${d.attendance==='참석'?'selected':''}>참석</option>
-              <option value="불참" ${d.attendance==='불참'?'selected':''}>불참</option>
-            </select>
-          </td>
-          <td class="px-2 py-6">
-            <input type="number" min="1" value="${d.count || ''}" placeholder="명" 
-                   class="w-full text-center border-slate-200 rounded-xl px-2 py-3 text-sm" ${isLocked ? 'disabled' : ''} />
-          </td>
-          <td class="px-6 py-6 text-right">
-            <button class="save-btn px-6 py-3 rounded-xl font-bold text-sm shadow-lg
-                          ${isLocked ? 'bg-slate-200 text-slate-400' : (isSubmitted ? 'bg-amber-500 text-white shadow-amber-200' : 'bg-blue-600 text-white shadow-blue-200')}">
-              ${btnText}
-            </button>
-          </td>
-        `;
-
-        const btn = tr.querySelector('button');
-        if(!isLocked){
-          btn.addEventListener('click', async ()=>{
-            const sel = tr.querySelector('select').value;
-            const cnt = tr.querySelector('input').value;
-            if(!sel) return alert('참석 여부를 선택해 주세요.');
-            if(sel==='참석' && !cnt) return alert('참석하실 총 인원을 적어주세요.');
-
-            const actionLabel = isSubmitted ? '수정' : '등록';
-            if(!confirm(`${m.name}님 정보로 ${actionLabel}하시겠습니까?`)) return;
-
-            await setDoc(doc(db, COL, String(m.id)), {
-              name: m.name, 
-              attendance: sel, 
-              count: sel==='참석' ? Number(cnt) : 0, 
-              lastSubmitted: today
-            }, { merge: true });
-
-            localStorage.setItem(CHOSEN_LS, m.id);
-            alert(`${actionLabel}이 완료되었습니다.`);
-            location.reload();
-          });
-        }
-        memberBody.appendChild(tr);
-      });
-
-      // 대시보드 통계 업데이트
-      let a=0, b=0, p=0, total=0;
-      members.forEach(m=>{
-        const d = dbMap[m.id] || {};
-        if(d.attendance==='참석') { a++; total += (d.count || 0); }
-        else if(d.attendance==='불참') b++;
-        else p++;
-      });
-      document.getElementById('attendCount').textContent = a;
-      document.getElementById('totalPeople').textContent = total;
-      document.getElementById('absentCount').textContent = b;
-      document.getElementById('pendingCount').textContent = p;
+    function getVotes() {
+      const stored = localStorage.getItem('oryang_votes_2026_10_two_dates');
+      if (stored) {
+        try { return JSON.parse(stored); } catch(e) {}
+      }
+      return SAMPLE_VOTES;
     }
 
-    // 실시간 리스너
-    members.forEach(m=>{
-      onSnapshot(doc(db, COL, String(m.id)), snap=>{
-        dbMap[m.id] = snap.exists() ? snap.data() : {};
-        renderRows();
-      });
-    });
+    function saveVotes(votes) {
+      localStorage.setItem('oryang_votes_2026_10_two_dates', JSON.stringify(votes));
+    }
 
-    // 관리자 초기화
-    document.getElementById('resetAll').addEventListener('click', async ()=>{
-      if(prompt('관리자 비밀번호를 입력하세요') !== '1122') return;
-      if(!confirm('모든 데이터를 초기화하시겠습니까?')) return;
-      const batch = writeBatch(db);
-      members.forEach(m=> batch.set(doc(db, COL, String(m.id)), { attendance:null, count:null, lastSubmitted:null }, {merge:true}));
-      await batch.commit();
-      localStorage.removeItem(CHOSEN_LS);
-      location.reload();
+    function renderFormOptions() {
+      const container = document.getElementById('dateOptionsContainer');
+      container.innerHTML = DATES.map(d => `
+        <label class="relative flex items-center justify-between p-4 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 cursor-pointer transition group">
+          <div class="flex items-center gap-3.5">
+            <input type="checkbox" name="dateOption" value="${d.id}" 
+              class="w-5 h-5 rounded-md text-amber-500 bg-slate-950 border-slate-700 focus:ring-amber-500/40 accent-amber-500 cursor-pointer">
+            <div>
+              <span class="text-base font-bold text-white group-hover:text-amber-300 transition">${d.label}</span>
+              <span class="text-xs text-slate-400 block mt-0.5">${d.note}</span>
+            </div>
+          </div>
+          ${d.highlight ? '<span class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">추천</span>' : ''}
+        </label>
+      `).join('');
+    }
+
+    function renderResults() {
+      const votes = getVotes();
+      const tallyList = document.getElementById('voteTallyList');
+      const voterFeed = document.getElementById('voterFeed');
+      const voterCount = document.getElementById('voterCount');
+      const totalVotersBadge = document.getElementById('totalVotersBadge');
+      const bestDateText = document.getElementById('bestDateText');
+
+      voterCount.textContent = votes.length;
+      totalVotersBadge.textContent = `총 ${votes.length}명 응답 완료`;
+
+      const counts = {};
+      DATES.forEach(d => counts[d.id] = { count: 0, voters: [] });
+
+      votes.forEach(v => {
+        if (Array.isArray(v.dates)) {
+          v.dates.forEach(dId => {
+            if (counts[dId]) {
+              counts[dId].count++;
+              counts[dId].voters.push(v.name);
+            }
+          });
+        }
+      });
+
+      let maxVote = 0;
+      ['d24', 'd31'].forEach(id => {
+        const totalForDate = counts[id].count + counts['d_all'].count;
+        if (totalForDate > maxVote) maxVote = totalForDate;
+      });
+
+      const topDates = [];
+      if (counts['d24'].count + counts['d_all'].count === maxVote && maxVote > 0) topDates.push('10월 24일(토)');
+      if (counts['d31'].count + counts['d_all'].count === maxVote && maxVote > 0) topDates.push('10월 31일(토)');
+
+      if (topDates.length > 0) {
+        bestDateText.textContent = topDates.join(' & ');
+      } else {
+        bestDateText.textContent = '투표 진행 중';
+      }
+
+      const totalResponses = votes.length || 1;
+      tallyList.innerHTML = DATES.map(d => {
+        const cnt = counts[d.id].count;
+        const pct = Math.round((cnt / totalResponses) * 100);
+        const isHighlight = d.highlight;
+        
+        return `
+          <div class="p-3.5 rounded-2xl ${isHighlight ? 'bg-amber-950/30 border border-amber-500/30' : 'bg-slate-900/60 border border-slate-800/80'} space-y-1.5">
+            <div class="flex justify-between items-center text-xs sm:text-sm">
+              <span class="font-bold ${isHighlight ? 'text-amber-300' : 'text-slate-200'}">
+                ${d.label}
+              </span>
+              <span class="font-bold text-amber-400">${cnt}표 (${pct}%)</span>
+            </div>
+            
+            <div class="w-full h-2.5 rounded-full bg-slate-800 overflow-hidden">
+              <div class="h-full bg-gradient-to-r ${isHighlight ? 'from-amber-400 to-orange-500' : 'from-slate-600 to-slate-400'} rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+            </div>
+
+            ${cnt > 0 ? `
+              <div class="text-[11px] text-slate-400 flex flex-wrap gap-1 pt-1">
+                ${counts[d.id].voters.map(v => `<span class="px-2 py-0.5 rounded-md bg-slate-800 border border-slate-700 text-slate-300 font-medium">${v}</span>`).join('')}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+
+      if (votes.length === 0) {
+        voterFeed.innerHTML = '<div class="text-slate-500 text-center py-4">아직 제출된 투표가 없습니다. 첫 투표자가 되어주세요!</div>';
+      } else {
+        voterFeed.innerHTML = votes.map(v => `
+          <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 flex justify-between items-start gap-2">
+            <div>
+              <div class="font-bold text-white flex items-center gap-1.5">
+                <span>👤 ${v.name}</span>
+              </div>
+              ${v.comment ? `<div class="text-[11px] text-slate-400 mt-0.5">💬 "${v.comment}"</div>` : ''}
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] text-amber-400 font-semibold px-2 py-0.5 rounded-md bg-amber-950/50 border border-amber-500/20">
+                ${v.dates.length}개 항목 선택
+              </span>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function handleVoteSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('memberName').value.trim();
+      const comment = document.getElementById('memberComment').value.trim();
+      const checkedBoxes = Array.from(document.querySelectorAll('input[name="dateOption"]:checked'));
+
+      if (!name) {
+        showToast('❌ 성함을 입력해 주세요!');
+        return;
+      }
+
+      if (checkedBoxes.length === 0) {
+        showToast('❌ 참석 가능 옵션을 하나 이상 선택해 주세요!');
+        return;
+      }
+
+      const selectedDateIds = checkedBoxes.map(cb => cb.value);
+      const votes = getVotes();
+
+      const existingIdx = votes.findIndex(v => v.name === name);
+      if (existingIdx >= 0) {
+        votes[existingIdx] = { name, dates: selectedDateIds, comment };
+        showToast(`✨ ${name}님의 투표 내용이 업데이트되었습니다!`);
+      } else {
+        votes.push({ name, dates: selectedDateIds, comment });
+        showToast(`🎉 ${name}님, 투표가 성공적으로 완료되었습니다!`);
+      }
+
+      saveVotes(votes);
+      renderResults();
+
+      checkedBoxes.forEach(cb => cb.checked = false);
+      document.getElementById('memberComment').value = '';
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+      }, 3000);
+    }
+
+    function copyLink() {
+      const url = window.location.href;
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('📋 투표 링크가 클립보드에 복사되었습니다!');
+      }).catch(() => {
+        showToast('📋 링크: ' + url);
+      });
+    }
+
+    function shareKakao() {
+      copyLink();
+      alert('카카오톡 공유 방법:\n\n링크가 클립보드에 복사되었습니다! 오량 형제계 단톡방에 붙여넣기(Ctrl+V) 하여 공유해 주세요. 🍁');
+    }
+
+    function scrollToResults() {
+      document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function resetData() {
+      if (confirm('모든 투표 기록을 초기화하시겠습니까?')) {
+        localStorage.removeItem('oryang_votes_2026_10_two_dates');
+        renderResults();
+        showToast('🔄 투표 데이터가 초기화되었습니다.');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderFormOptions();
+      renderResults();
     });
   </script>
 </body>
