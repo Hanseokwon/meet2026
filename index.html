@@ -92,6 +92,49 @@
         </div>
       </header>
 
+      <!-- Dashboard Cards Section (날짜별 참석 인원 & 불참 인원 대시보드) -->
+      <div class="p-4 sm:p-5 bg-slate-50/80 border-b border-slate-200/80">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+          
+          <!-- Card 1: 10/24(토) Attending -->
+          <div class="bg-indigo-50/90 border border-indigo-200/80 rounded-2xl p-3 shadow-2xs">
+            <div class="text-[11px] font-extrabold text-indigo-700">10/24(토) 참석</div>
+            <div class="text-lg font-black text-indigo-950 mt-0.5">
+              <span id="statOct24" class="text-indigo-600 text-xl">0</span>명
+            </div>
+            <div id="subOct24" class="text-[10px] text-indigo-500 font-medium">동반 0명</div>
+          </div>
+
+          <!-- Card 2: 10/31(토) Attending -->
+          <div class="bg-amber-50/90 border border-amber-200/80 rounded-2xl p-3 shadow-2xs">
+            <div class="text-[11px] font-extrabold text-amber-800">10/31(토) 참석</div>
+            <div class="text-lg font-black text-amber-950 mt-0.5">
+              <span id="statOct31" class="text-amber-700 text-xl">0</span>명
+            </div>
+            <div id="subOct31" class="text-[10px] text-amber-600 font-medium">동반 0명</div>
+          </div>
+
+          <!-- Card 3: Absent -->
+          <div class="bg-rose-50/90 border border-rose-200/80 rounded-2xl p-3 shadow-2xs">
+            <div class="text-[11px] font-extrabold text-rose-700">불참 인원</div>
+            <div class="text-lg font-black text-rose-950 mt-0.5">
+              <span id="statAbsent" class="text-rose-600 text-xl">0</span>명
+            </div>
+            <div class="text-[10px] text-rose-400 font-medium">불참 응답</div>
+          </div>
+
+          <!-- Card 4: Unanswered -->
+          <div class="bg-slate-100 border border-slate-200/80 rounded-2xl p-3 shadow-2xs">
+            <div class="text-[11px] font-extrabold text-slate-600">미응답</div>
+            <div class="text-lg font-black text-slate-800 mt-0.5">
+              <span id="statUnanswered" class="text-slate-800 text-xl">16</span>명
+            </div>
+            <div class="text-[10px] text-slate-400 font-medium">총 16명 중</div>
+          </div>
+
+        </div>
+      </div>
+
       <!-- Member Roster Table (16 Official Members Only) -->
       <div class="p-3 sm:p-5 space-y-3" id="memberListContainer">
         <!-- Strictly generated for 16 official members -->
@@ -118,7 +161,7 @@
 
   </div>
 
-  <!-- Admin Modal (Password: 1234) -->
+  <!-- Admin Modal (Password: 1122) -->
   <div id="adminModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-all duration-200">
     <div class="bg-white rounded-3xl p-5 sm:p-6 max-w-sm w-full shadow-2xl border border-slate-200 space-y-4 transform scale-95 transition-all duration-200" id="adminModalCard">
       
@@ -131,7 +174,7 @@
 
       <!-- Admin Login Box -->
       <div id="adminLoginBox" class="space-y-3">
-        <p class="text-xs text-slate-600 font-medium">관리자 비밀번호를 입력해 주세요 (기본: 1234)</p>
+        <p class="text-xs text-slate-600 font-medium">관리자 비밀번호를 입력해 주세요 (1122)</p>
         <input type="password" id="adminPasswordInput" placeholder="비밀번호 입력" 
           class="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-bold focus:outline-none focus:border-indigo-500">
         <button onclick="checkAdminPassword()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs rounded-xl shadow-xs transition">
@@ -164,8 +207,7 @@
   </div>
 
   <script>
-    // Automatically purge old mock/sample cache keys from localStorage
-    ['oryang_votes_2026_10', 'oryang_votes_2026_10_two_dates', 'oryang_votes_2026_10_sample', 'oryang_16_table_votes', 'oryang_strict_votes_clean', 'oryang_16_clean_v6', 'oryang_16_clean_v7', 'oryang_clean_v8_strict'].forEach(k => {
+    ['oryang_votes_2026_10', 'oryang_votes_2026_10_two_dates', 'oryang_votes_2026_10_sample', 'oryang_16_table_votes', 'oryang_strict_votes_clean', 'oryang_16_clean_v6', 'oryang_16_clean_v7', 'oryang_clean_v8_strict', 'oryang_v9_clean'].forEach(k => {
       try { localStorage.removeItem(k); } catch(e) {}
     });
 
@@ -186,7 +228,7 @@
     }
 
     function getVotes() {
-      const stored = localStorage.getItem('oryang_v9_clean');
+      const stored = localStorage.getItem('oryang_v11_strict1122');
       if (stored) {
         try { return JSON.parse(stored); } catch(e) {}
       }
@@ -194,13 +236,20 @@
     }
 
     function saveVotes(votes) {
-      localStorage.setItem('oryang_v9_clean', JSON.stringify(votes));
+      localStorage.setItem('oryang_v11_strict1122', JSON.stringify(votes));
     }
 
     function renderRoster() {
       const votes = getVotes();
       const container = document.getElementById('memberListContainer');
       const expired = isExpired();
+
+      let oct24Members = 0;
+      let oct24Companions = 0;
+      let oct31Members = 0;
+      let oct31Companions = 0;
+      let absentMembers = 0;
+      let totalAnswered = 0;
 
       container.innerHTML = OFFICIAL_MEMBERS.map((name, index) => {
         const v = votes[name] || {};
@@ -209,48 +258,53 @@
         const currentComment = v.comment || '';
 
         const isAnswered = Boolean(currentOption);
+        if (isAnswered) {
+          totalAnswered += 1;
+          const countNum = parseInt(currentCount) || 0;
+
+          if (currentOption === 'd24') {
+            oct24Members += 1;
+            oct24Companions += countNum;
+          } else if (currentOption === 'd31') {
+            oct31Members += 1;
+            oct31Companions += countNum;
+          } else if (currentOption === 'd_none') {
+            absentMembers += 1;
+          }
+        }
 
         return `
           <div class="p-3 sm:p-3.5 rounded-2xl ${isAnswered ? 'bg-indigo-50/40 border border-indigo-100' : 'bg-white border border-slate-100'} hover:border-indigo-300 transition space-y-2">
             
             <div class="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
-              <!-- Member Name -->
               <div class="w-28 sm:w-32 font-extrabold text-sm sm:text-base text-slate-900 flex items-center gap-1.5 shrink-0">
                 <span class="text-xs text-slate-400 font-semibold">${index + 1}.</span>
                 <span>${name}</span>
                 <span class="text-[10px] text-indigo-600 bg-indigo-50 px-1.5 py-0.2 rounded border border-indigo-200 font-bold">회원</span>
               </div>
 
-              <!-- Controls Group -->
               <div class="flex items-center gap-2 flex-1 justify-end">
-                
-                <!-- Attendance Dropdown -->
                 <select id="select_${index}" ${expired ? 'disabled' : ''}
                   class="bg-slate-50 border border-slate-200/90 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 cursor-pointer min-w-[125px] sm:min-w-[145px] ${expired ? 'opacity-60 cursor-not-allowed' : ''}">
                   <option value="" ${currentOption === '' ? 'selected' : ''}>참석 여부 ∨</option>
                   <option value="d24" ${currentOption === 'd24' ? 'selected' : ''}>10/24(토) 참석</option>
                   <option value="d31" ${currentOption === 'd31' ? 'selected' : ''}>10/31(토) 참석</option>
-                  <option value="d_all" ${currentOption === 'd_all' ? 'selected' : ''}>둘 다 가능 (10/24,31)</option>
                   <option value="d_none" ${currentOption === 'd_none' ? 'selected' : ''}>불참</option>
                 </select>
 
-                <!-- Companion Count Field (명) -->
                 <div class="relative w-16 sm:w-20 shrink-0">
                   <input type="number" id="count_${index}" min="0" max="10" placeholder="명" value="${currentCount}" ${expired ? 'disabled' : ''}
                     class="w-full bg-slate-50 border border-slate-200/90 rounded-xl px-2.5 py-2 text-xs font-bold text-center text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 ${expired ? 'opacity-60 cursor-not-allowed' : ''}">
                   <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-slate-400 pointer-events-none font-medium">명</span>
                 </div>
 
-                <!-- Confirm Button (확인) -->
                 <button onclick="saveMemberRow('${name}', ${index})" ${expired ? 'disabled' : ''}
                   class="${expired ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : (isAnswered ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300')} px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition active:scale-95 shadow-2xs shrink-0">
                   ${expired ? '마감' : '확인'}
                 </button>
-
               </div>
             </div>
 
-            <!-- Venue Recommendation / Comment Input -->
             <div class="pt-1 flex items-center gap-2">
               <span class="text-[11px] font-bold text-slate-500 shrink-0">장소 추천 / 한줄 의견:</span>
               <input type="text" id="comment_${index}" placeholder="예: 10월 21일" value="${currentComment}" ${expired ? 'disabled' : ''}
@@ -260,6 +314,17 @@
           </div>
         `;
       }).join('');
+
+      // Update Dashboard Stats
+      const unansweredCount = 16 - totalAnswered;
+      document.getElementById('statOct24').textContent = oct24Members;
+      document.getElementById('subOct24').textContent = `동반 ${oct24Companions}명`;
+
+      document.getElementById('statOct31').textContent = oct31Members;
+      document.getElementById('subOct31').textContent = `동반 ${oct31Companions}명`;
+
+      document.getElementById('statAbsent').textContent = absentMembers;
+      document.getElementById('statUnanswered').textContent = unansweredCount;
     }
 
     function saveMemberRow(name, index) {
@@ -295,7 +360,6 @@
       let optionText = '불참';
       if (option === 'd24') optionText = '10/24(토) 참석';
       else if (option === 'd31') optionText = '10/31(토) 참석';
-      else if (option === 'd_all') optionText = '둘 다 가능';
 
       showToast(`✅ ${name} 회원님: [${optionText}${count ? ', 동반 ' + count + '명' : ''}] 완료!`);
     }
@@ -318,18 +382,18 @@
 
     function checkAdminPassword() {
       const pass = document.getElementById('adminPasswordInput').value;
-      if (pass === '1234') {
+      if (pass === '1122') {
         document.getElementById('adminLoginBox').classList.add('hidden');
         document.getElementById('adminPanelBox').classList.remove('hidden');
         showToast('🔓 관리자로 접근 권한이 승인되었습니다.');
       } else {
-        showToast('❌ 비밀번호가 올바르지 않습니다. (1234)', 'error');
+        showToast('❌ 비밀번호가 올바르지 않습니다. (1122)', 'error');
       }
     }
 
     function resetAllVotesOnce() {
       if (confirm('전체 회원 투표 데이터를 즉시 0표 상태로 한번에 초기화하시겠습니까?')) {
-        localStorage.setItem('oryang_v9_clean', JSON.stringify({}));
+        localStorage.setItem('oryang_v11_strict1122', JSON.stringify({}));
         renderRoster();
         showToast('🧹 전체 투표 데이터가 0표로 한번에 초기화되었습니다!');
         closeAdminModal();
