@@ -161,32 +161,32 @@
         <div class="text-xs font-extrabold text-indigo-900 mb-2.5 flex items-center justify-between">
           <div class="flex items-center gap-1.5">
             <span class="text-sm">🗓️</span>
-            <span>날짜별 참석 희망 회원 현황</span>
+            <span>날짜별 참석 희망 현황</span>
           </div>
           <span class="text-[10px] text-indigo-500 font-semibold">(실시간 집계)</span>
         </div>
         <div class="grid grid-cols-2 gap-3 text-center">
           
-          <!-- Card 1: 10.24(토) 참석 회원 -->
+          <!-- Card 1: 10.24(토) 참석 인원 -->
           <div class="bg-white border-2 border-indigo-200 hover:border-indigo-500 rounded-2xl p-3.5 shadow-sm transition flex flex-col items-center justify-center">
             <div class="text-xs font-bold text-indigo-800 flex items-center gap-1">
-              <span>📅</span> 10.24(토) 참석
+              <span>📅</span> 10.24(토) 참석 인원
             </div>
             <div class="text-2xl sm:text-3xl font-black text-indigo-950 leading-none mt-2">
               <span id="statDate24" class="text-indigo-600">0</span><span class="text-base sm:text-lg text-indigo-900">명</span>
             </div>
-            <div id="subDate24" class="text-[10.5px] text-indigo-500 font-semibold mt-1 min-h-[16px]"></div>
+            <div id="subDate24" class="text-[10.5px] text-indigo-500 font-semibold mt-1"></div>
           </div>
 
-          <!-- Card 2: 10.31(토) 참석 회원 -->
+          <!-- Card 2: 10.31(토) 참석 인원 -->
           <div class="bg-white border-2 border-indigo-200 hover:border-indigo-500 rounded-2xl p-3.5 shadow-sm transition flex flex-col items-center justify-center">
             <div class="text-xs font-bold text-indigo-800 flex items-center gap-1">
-              <span>📅</span> 10.31(토) 참석
+              <span>📅</span> 10.31(토) 참석 인원
             </div>
             <div class="text-2xl sm:text-3xl font-black text-indigo-950 leading-none mt-2">
               <span id="statDate31" class="text-indigo-600">0</span><span class="text-base sm:text-lg text-indigo-900">명</span>
             </div>
-            <div id="subDate31" class="text-[10.5px] text-indigo-500 font-semibold mt-1 min-h-[16px]"></div>
+            <div id="subDate31" class="text-[10.5px] text-indigo-500 font-semibold mt-1"></div>
           </div>
 
         </div>
@@ -375,10 +375,10 @@
       const expired = isExpired();
 
       let member24Count = 0;
-      let companion24Count = 0;
+      let total24Headcount = 0;
 
       let member31Count = 0;
-      let companion31Count = 0;
+      let total31Headcount = 0;
 
       let absentCount = 0;
       let totalAnswered = 0;
@@ -386,18 +386,28 @@
       container.innerHTML = OFFICIAL_MEMBERS.map((name, index) => {
         const v = votes[name] || {};
         const currentOption = v.option || '';
-        const currentCount = v.count || '';
-        const companion = parseInt(currentCount || '0', 10) || 0;
+        const currentCountStr = (v.count || '').trim();
+        
+        // Exact Headcount Calculation:
+        // Input number typed (e.g. 1, 2, 3) IS the total headcount for this member's group!
+        // If empty or 0, default headcount is 1 (the member themselves).
+        let groupHeadcount = 1;
+        if (currentCountStr !== '') {
+          const parsed = parseInt(currentCountStr, 10);
+          if (!isNaN(parsed) && parsed > 0) {
+            groupHeadcount = parsed;
+          }
+        }
 
         const isAnswered = Boolean(currentOption);
         if (isAnswered) {
           totalAnswered += 1;
           if (currentOption === 'd24') {
             member24Count += 1;
-            companion24Count += companion;
+            total24Headcount += groupHeadcount;
           } else if (currentOption === 'd31') {
             member31Count += 1;
-            companion31Count += companion;
+            total31Headcount += groupHeadcount;
           } else if (currentOption === 'd_none') {
             absentCount += 1;
           }
@@ -428,9 +438,9 @@
                 <option value="d_none" ${currentOption === 'd_none' ? 'selected' : ''}>불참</option>
               </select>
 
-              <!-- Companion Count Field (명) -->
+              <!-- Headcount Field (명) -->
               <div class="relative w-16 sm:w-20 shrink-0">
-                <input type="number" id="${countId}" min="0" max="10" placeholder="명" value="${currentCount}" ${expired && !isAdmin ? 'disabled' : ''} oninput="checkBlink(${index})"
+                <input type="number" id="${countId}" min="1" max="10" placeholder="명" value="${currentCountStr}" ${expired && !isAdmin ? 'disabled' : ''} oninput="checkBlink(${index})"
                   class="w-full bg-slate-50 border border-slate-200/90 rounded-xl px-2.5 py-2 text-xs font-bold text-center text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 ${(expired && !isAdmin) ? 'opacity-60 cursor-not-allowed' : ''}">
                 <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-slate-400 pointer-events-none font-medium">명</span>
               </div>
@@ -446,20 +456,20 @@
         `;
       }).join('');
 
-      // Update 10.24 & 10.31 Member Counts & Headcounts
-      document.getElementById('statDate24').textContent = member24Count;
+      // Update 10.24 & 10.31 Date Attendance Headcounts
+      document.getElementById('statDate24').textContent = total24Headcount;
       const sub24 = document.getElementById('subDate24');
       if (sub24) {
-        sub24.textContent = companion24Count > 0 ? `(동반 +${companion24Count}명 포함 총 ${member24Count + companion24Count}명)` : '';
+        sub24.textContent = member24Count > 0 ? `(선택 회원 ${member24Count}명)` : '';
       }
 
-      document.getElementById('statDate31').textContent = member31Count;
+      document.getElementById('statDate31').textContent = total31Headcount;
       const sub31 = document.getElementById('subDate31');
       if (sub31) {
-        sub31.textContent = companion31Count > 0 ? `(동반 +${companion31Count}명 포함 총 ${member31Count + companion31Count}명)` : '';
+        sub31.textContent = member31Count > 0 ? `(선택 회원 ${member31Count}명)` : '';
       }
 
-      // Update 3 Stat Cards (참석 명수 = 10/24 참석 회원 + 10/31 참석 회원)
+      // Update 3 Stat Cards (참석 명수 = 10/24 회원 + 10/31 회원)
       const totalAttendingMembers = member24Count + member31Count;
       const unansweredCount = 16 - totalAttendingMembers - absentCount;
 
@@ -513,7 +523,8 @@
       if (option === 'd24') optionText = '10/24(토) 참석';
       else if (option === 'd31') optionText = '10/31(토) 참석';
 
-      showToast(`✅ ${name} 회원님: [${optionText}${count ? ', 동반 ' + count + '명' : ''}] 등록 완료!`);
+      const dispHeadcount = count ? count + '명' : '1명';
+      showToast(`✅ ${name} 회원님: [${optionText}${option !== 'd_none' ? ', 총 ' + dispHeadcount : ''}] 등록 완료!`);
     }
 
     // Global Single Venue Recommendation Functions
