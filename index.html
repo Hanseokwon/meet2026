@@ -156,7 +156,41 @@
         </div>
       </header>
 
-      <!-- Stat Dashboard Cards (3 Cards Placed Right Above Member #1 이경득) -->
+      <!-- Date Attendance Summary Cards (Placed strictly between Header and 3 Stat Cards) -->
+      <div class="p-4 sm:p-5 bg-gradient-to-b from-indigo-50/80 to-slate-50 border-b border-indigo-100">
+        <div class="text-xs font-extrabold text-indigo-900 mb-2.5 flex items-center justify-between">
+          <div class="flex items-center gap-1.5">
+            <span class="text-sm">🗓️</span>
+            <span>날짜별 참석 희망 현황</span>
+          </div>
+          <span class="text-[10px] text-indigo-500 font-semibold">(실시간 집계)</span>
+        </div>
+        <div class="grid grid-cols-2 gap-3 text-center">
+          
+          <!-- Card 1: 10.24(토) 참석 인원 -->
+          <div class="bg-white border-2 border-indigo-200 hover:border-indigo-500 rounded-2xl p-3.5 shadow-sm transition flex flex-col items-center justify-center">
+            <div class="text-xs font-bold text-indigo-800 flex items-center gap-1">
+              <span>📅</span> 10.24(토) 참석 인원
+            </div>
+            <div class="text-2xl sm:text-3xl font-black text-indigo-950 leading-none mt-2">
+              <span id="statDate24" class="text-indigo-600">0</span><span class="text-base sm:text-lg text-indigo-900">명</span>
+            </div>
+          </div>
+
+          <!-- Card 2: 10.31(토) 참석 인원 -->
+          <div class="bg-white border-2 border-indigo-200 hover:border-indigo-500 rounded-2xl p-3.5 shadow-sm transition flex flex-col items-center justify-center">
+            <div class="text-xs font-bold text-indigo-800 flex items-center gap-1">
+              <span>📅</span> 10.31(토) 참석 인원
+            </div>
+            <div class="text-2xl sm:text-3xl font-black text-indigo-950 leading-none mt-2">
+              <span id="statDate31" class="text-indigo-600">0</span><span class="text-base sm:text-lg text-indigo-900">명</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Stat Dashboard Cards (3 Cards: 참석 명수, 불참 인원, 미응답) -->
       <div class="p-4 sm:p-5 bg-white border-b border-slate-100">
         <div class="grid grid-cols-3 gap-3 text-center">
           
@@ -342,16 +376,24 @@
       let absentCount = 0;
       let totalAnswered = 0;
 
+      let date24Count = 0;
+      let date31Count = 0;
+
       container.innerHTML = OFFICIAL_MEMBERS.map((name, index) => {
         const v = votes[name] || {};
         const currentOption = v.option || '';
         const currentCount = v.count || '';
+        const companion = parseInt(currentCount || '0', 10) || 0;
 
         const isAnswered = Boolean(currentOption);
         if (isAnswered) {
           totalAnswered += 1;
-          if (currentOption === 'd24' || currentOption === 'd31') {
+          if (currentOption === 'd24') {
             attendingCount += 1;
+            date24Count += (1 + companion);
+          } else if (currentOption === 'd31') {
+            attendingCount += 1;
+            date31Count += (1 + companion);
           } else if (currentOption === 'd_none') {
             absentCount += 1;
           }
@@ -400,7 +442,11 @@
         `;
       }).join('');
 
-      // Update 3 Stat Cards
+      // Update Date Attendance Cards (10.24 & 10.31)
+      document.getElementById('statDate24').textContent = date24Count;
+      document.getElementById('statDate31').textContent = date31Count;
+
+      // Update 3 Stat Cards (참석 명수, 불참 인원, 미응답)
       const unansweredCount = 16 - totalAnswered;
       document.getElementById('statAttending').textContent = attendingCount;
       document.getElementById('statAbsent').textContent = absentCount;
