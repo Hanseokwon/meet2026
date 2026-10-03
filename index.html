@@ -161,30 +161,32 @@
         <div class="text-xs font-extrabold text-indigo-900 mb-2.5 flex items-center justify-between">
           <div class="flex items-center gap-1.5">
             <span class="text-sm">🗓️</span>
-            <span>날짜별 참석 희망 현황</span>
+            <span>날짜별 참석 희망 회원 현황</span>
           </div>
           <span class="text-[10px] text-indigo-500 font-semibold">(실시간 집계)</span>
         </div>
         <div class="grid grid-cols-2 gap-3 text-center">
           
-          <!-- Card 1: 10.24(토) 참석 인원 -->
+          <!-- Card 1: 10.24(토) 참석 회원 -->
           <div class="bg-white border-2 border-indigo-200 hover:border-indigo-500 rounded-2xl p-3.5 shadow-sm transition flex flex-col items-center justify-center">
             <div class="text-xs font-bold text-indigo-800 flex items-center gap-1">
-              <span>📅</span> 10.24(토) 참석 인원
+              <span>📅</span> 10.24(토) 참석
             </div>
             <div class="text-2xl sm:text-3xl font-black text-indigo-950 leading-none mt-2">
               <span id="statDate24" class="text-indigo-600">0</span><span class="text-base sm:text-lg text-indigo-900">명</span>
             </div>
+            <div id="subDate24" class="text-[10.5px] text-indigo-500 font-semibold mt-1 min-h-[16px]"></div>
           </div>
 
-          <!-- Card 2: 10.31(토) 참석 인원 -->
+          <!-- Card 2: 10.31(토) 참석 회원 -->
           <div class="bg-white border-2 border-indigo-200 hover:border-indigo-500 rounded-2xl p-3.5 shadow-sm transition flex flex-col items-center justify-center">
             <div class="text-xs font-bold text-indigo-800 flex items-center gap-1">
-              <span>📅</span> 10.31(토) 참석 인원
+              <span>📅</span> 10.31(토) 참석
             </div>
             <div class="text-2xl sm:text-3xl font-black text-indigo-950 leading-none mt-2">
               <span id="statDate31" class="text-indigo-600">0</span><span class="text-base sm:text-lg text-indigo-900">명</span>
             </div>
+            <div id="subDate31" class="text-[10.5px] text-indigo-500 font-semibold mt-1 min-h-[16px]"></div>
           </div>
 
         </div>
@@ -372,12 +374,14 @@
       const container = document.getElementById('memberListContainer');
       const expired = isExpired();
 
-      let attendingCount = 0;
+      let member24Count = 0;
+      let companion24Count = 0;
+
+      let member31Count = 0;
+      let companion31Count = 0;
+
       let absentCount = 0;
       let totalAnswered = 0;
-
-      let date24Count = 0;
-      let date31Count = 0;
 
       container.innerHTML = OFFICIAL_MEMBERS.map((name, index) => {
         const v = votes[name] || {};
@@ -389,11 +393,11 @@
         if (isAnswered) {
           totalAnswered += 1;
           if (currentOption === 'd24') {
-            attendingCount += 1;
-            date24Count += (1 + companion);
+            member24Count += 1;
+            companion24Count += companion;
           } else if (currentOption === 'd31') {
-            attendingCount += 1;
-            date31Count += (1 + companion);
+            member31Count += 1;
+            companion31Count += companion;
           } else if (currentOption === 'd_none') {
             absentCount += 1;
           }
@@ -442,13 +446,24 @@
         `;
       }).join('');
 
-      // Update Date Attendance Cards (10.24 & 10.31)
-      document.getElementById('statDate24').textContent = date24Count;
-      document.getElementById('statDate31').textContent = date31Count;
+      // Update 10.24 & 10.31 Member Counts & Headcounts
+      document.getElementById('statDate24').textContent = member24Count;
+      const sub24 = document.getElementById('subDate24');
+      if (sub24) {
+        sub24.textContent = companion24Count > 0 ? `(동반 +${companion24Count}명 포함 총 ${member24Count + companion24Count}명)` : '';
+      }
 
-      // Update 3 Stat Cards (참석 명수, 불참 인원, 미응답)
-      const unansweredCount = 16 - totalAnswered;
-      document.getElementById('statAttending').textContent = attendingCount;
+      document.getElementById('statDate31').textContent = member31Count;
+      const sub31 = document.getElementById('subDate31');
+      if (sub31) {
+        sub31.textContent = companion31Count > 0 ? `(동반 +${companion31Count}명 포함 총 ${member31Count + companion31Count}명)` : '';
+      }
+
+      // Update 3 Stat Cards (참석 명수 = 10/24 참석 회원 + 10/31 참석 회원)
+      const totalAttendingMembers = member24Count + member31Count;
+      const unansweredCount = 16 - totalAttendingMembers - absentCount;
+
+      document.getElementById('statAttending').textContent = totalAttendingMembers;
       document.getElementById('statAbsent').textContent = absentCount;
       document.getElementById('statUnanswered').textContent = unansweredCount;
 
