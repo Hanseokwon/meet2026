@@ -167,26 +167,24 @@
         </div>
         <div class="grid grid-cols-2 gap-3 text-center">
           
-          <!-- Card 1: 10.24(토) 참석 인원 -->
-          <div class="bg-white border-2 border-indigo-200 hover:border-indigo-500 rounded-2xl p-3.5 shadow-sm transition flex flex-col items-center justify-center">
-            <div class="text-xs font-bold text-indigo-800 flex items-center gap-1">
-              <span>📅</span> 10.24(토) 참석 인원
+          <!-- Card 1: 10.24(토) 선택 인원 -->
+          <div class="bg-white border-2 border-indigo-200 hover:border-indigo-500 rounded-2xl p-4 shadow-sm transition flex flex-col items-center justify-center">
+            <div class="text-xs sm:text-sm font-bold text-indigo-800 flex items-center gap-1">
+              <span>📅</span> 10.24(토) 선택 인원
             </div>
             <div class="text-2xl sm:text-3xl font-black text-indigo-950 leading-none mt-2">
               <span id="statDate24" class="text-indigo-600">0</span><span class="text-base sm:text-lg text-indigo-900">명</span>
             </div>
-            <div id="subDate24" class="text-[10.5px] text-indigo-500 font-semibold mt-1"></div>
           </div>
 
-          <!-- Card 2: 10.31(토) 참석 인원 -->
-          <div class="bg-white border-2 border-indigo-200 hover:border-indigo-500 rounded-2xl p-3.5 shadow-sm transition flex flex-col items-center justify-center">
-            <div class="text-xs font-bold text-indigo-800 flex items-center gap-1">
-              <span>📅</span> 10.31(토) 참석 인원
+          <!-- Card 2: 10.31(토) 선택 인원 -->
+          <div class="bg-white border-2 border-indigo-200 hover:border-indigo-500 rounded-2xl p-4 shadow-sm transition flex flex-col items-center justify-center">
+            <div class="text-xs sm:text-sm font-bold text-indigo-800 flex items-center gap-1">
+              <span>📅</span> 10.31(토) 선택 인원
             </div>
             <div class="text-2xl sm:text-3xl font-black text-indigo-950 leading-none mt-2">
               <span id="statDate31" class="text-indigo-600">0</span><span class="text-base sm:text-lg text-indigo-900">명</span>
             </div>
-            <div id="subDate31" class="text-[10.5px] text-indigo-500 font-semibold mt-1"></div>
           </div>
 
         </div>
@@ -453,21 +451,13 @@
         `;
       }).join('');
 
-      // 1. Top Card 1: 10.24(토) 참석 인원 = 10.24 날짜 선택 인원 총 취합
+      // 1. Top Card 1: 10.24(토) 선택 인원 (깨끗하게 메인 숫자만 표시)
       document.getElementById('statDate24').textContent = total24Headcount;
-      const sub24 = document.getElementById('subDate24');
-      if (sub24) {
-        sub24.textContent = member24Count > 0 ? `(선택 회원 ${member24Count}명)` : '';
-      }
 
-      // 2. Top Card 2: 10.31(토) 참석 인원 = 10.31 날짜 선택 인원 총 취합
+      // 2. Top Card 2: 10.31(토) 선택 인원 (깨끗하게 메인 숫자만 표시)
       document.getElementById('statDate31').textContent = total31Headcount;
-      const sub31 = document.getElementById('subDate31');
-      if (sub31) {
-        sub31.textContent = member31Count > 0 ? `(선택 회원 ${member31Count}명)` : '';
-      }
 
-      // 3. Stat Card 1: 총 참석 인원 = 모든 날짜 참석 인원의 총 합계
+      // 3. Stat Card 1: 총 참석 인원 = 모든 날짜 참석 인원 합계
       const totalAttendingHeadcount = total24Headcount + total31Headcount;
       const totalAttendingMembers = member24Count + member31Count;
       const unansweredCount = 16 - totalAttendingMembers - absentCount;
