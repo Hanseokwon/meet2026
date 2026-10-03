@@ -43,6 +43,26 @@
     .shadow-card {
       box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
     }
+    
+    /* Blinking animation for [확인] button when option is changed */
+    @keyframes pulse-blink {
+      0%, 100% {
+        background-color: #f59e0b;
+        color: #0f172a;
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.8);
+        transform: scale(1);
+      }
+      50% {
+        background-color: #dc2626;
+        color: #ffffff;
+        box-shadow: 0 0 14px 4px rgba(220, 38, 38, 0.5);
+        transform: scale(1.08);
+      }
+    }
+    .btn-blink {
+      animation: pulse-blink 0.75s infinite ease-in-out !important;
+      font-weight: 900 !important;
+    }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen pb-16 selection:bg-indigo-600 selection:text-white">
@@ -51,6 +71,30 @@
   <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3.5 rounded-2xl shadow-2xl border border-slate-700 text-sm font-bold opacity-0 pointer-events-none transition-all duration-300 transform -translate-y-4 z-50 flex items-center gap-3">
     <span class="text-base" id="toastIcon">📋</span>
     <span id="toastMsg">처리되었습니다!</span>
+  </div>
+
+  <!-- Admin Login Modal -->
+  <div id="adminModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+          <span>🔑</span> 관리자 접속
+        </h3>
+        <button onclick="closeAdminModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
+      </div>
+      <p class="text-xs text-slate-500 font-medium leading-relaxed">
+        관리자 비밀번호 4자리를 입력해주세요.
+      </p>
+      <div>
+        <input type="password" id="adminPasswordInput" placeholder="비밀번호 입력" 
+          onkeydown="if(event.key==='Enter') submitAdminPassword()"
+          class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-3 text-base font-bold text-center tracking-widest text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20">
+      </div>
+      <div class="flex gap-2 pt-1">
+        <button onclick="closeAdminModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs py-3 rounded-xl transition">취소</button>
+        <button onclick="submitAdminPassword()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-3 rounded-xl transition shadow-md">확인</button>
+      </div>
+    </div>
   </div>
 
   <div class="max-w-xl mx-auto px-3 sm:px-4 pt-4 sm:pt-6 space-y-3.5">
@@ -64,6 +108,22 @@
       <span class="bg-slate-950 text-amber-300 text-[10px] px-2 py-0.5 rounded-full font-bold">기한 엄수</span>
     </div>
 
+    <!-- Admin Status Banner (Visible when logged in as admin) -->
+    <div id="adminBanner" class="bg-indigo-900 text-white px-4 py-3 rounded-2xl flex items-center justify-between shadow-md border border-indigo-700 hidden">
+      <div class="flex items-center gap-2 text-xs font-extrabold text-amber-300">
+        <span>🔑</span>
+        <span>관리자 로그인 상태 (1인1회 제한 해제 / 모든 수정 가능)</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="resetAllVotes()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition active:scale-95 shadow-sm flex items-center gap-1">
+          <span>🔄</span> 전체 초기화
+        </button>
+        <button onclick="logoutAdmin()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold px-2.5 py-1.5 rounded-xl transition">
+          로그아웃
+        </button>
+      </div>
+    </div>
+
     <!-- Main Container Card -->
     <div class="bg-white rounded-3xl shadow-card border border-slate-200/80 overflow-hidden">
       
@@ -74,7 +134,7 @@
             <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-amber-300 text-xs font-bold mb-2">
               <span>🍁 2026 오량 형제계</span>
             </div>
-            <!-- Title changed to 10월 모임 참석 투표 -->
+            <!-- Title: 10월 모임 참석 투표 -->
             <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">10월 모임 참석 투표</h1>
             <div class="flex flex-col sm:flex-row sm:items-center gap-1.5 text-indigo-200 text-xs sm:text-sm mt-2 font-semibold">
               <span>📅 10. 24(토) vs 10. 31(토) 모임</span>
@@ -84,9 +144,12 @@
             </div>
           </div>
 
-          <!-- Kakao Share Pill Button -->
+          <!-- Buttons Group (Admin & Kakao Share) -->
           <div class="flex items-center gap-1.5">
-            <button onclick="shareKakao()" class="bg-white/10 hover:bg-white/20 text-white px-3.5 py-1.5 rounded-full text-xs font-bold backdrop-blur-md border border-white/20 transition active:scale-95">
+            <button onclick="openAdminModal()" class="bg-amber-400 hover:bg-amber-500 text-slate-950 px-3 py-1.5 rounded-full text-xs font-black transition active:scale-95 shadow-xs">
+              🔑 관리자
+            </button>
+            <button onclick="shareKakao()" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-full text-xs font-bold backdrop-blur-md border border-white/20 transition active:scale-95">
               카톡 공유
             </button>
           </div>
@@ -157,8 +220,9 @@
       </h3>
       <ul class="text-slate-300 space-y-1.5 pl-4 list-disc leading-relaxed font-medium text-[11.5px]">
         <li>오량 형제계 공식 회원 <b>16명 전용</b> 참석 투표 페이지입니다.</li>
-        <li><b>📢 10월 21일(수) 23:59까지 수정 가능합니다.</b> (이후에는 선택 및 수정 불가)</li>
-        <li>원활한 모임 준비를 위해 본인 성함 우측의 <b>참석 여부</b> 선택 후 <b>[확인]</b>을 눌러주세요.</li>
+        <li><b>1인 1회만 투표 가능</b>하며, 본인 성함 항목에서 투표를 진행해 주세요.</li>
+        <li><b>📢 10월 21일(수) 23:59까지 수정 가능합니다.</b></li>
+        <li>참석 여부 선택 후 <b>[확인] 버튼이 깜빡일 때 반드시 [확인]을 눌러야</b> 투표가 최종 반영됩니다.</li>
       </ul>
       <div class="pt-2 text-[10px] text-slate-500 text-center border-t border-slate-800">
         hanseokwon.github.io/meet2026/ | 오량 형제계 10월 모임 시스템
@@ -179,6 +243,9 @@
     // Modification Deadline: 2026-10-21 23:59:59
     const DEADLINE = new Date('2026-10-21T23:59:59');
 
+    // Admin State
+    let isAdmin = false;
+
     function isExpired() {
       return new Date() > DEADLINE;
     }
@@ -193,6 +260,77 @@
 
     function saveVotes(votes) {
       localStorage.setItem('oryang_v13_official', JSON.stringify(votes));
+    }
+
+    // Admin Modal Logic
+    function openAdminModal() {
+      if (isAdmin) {
+        showToast('🔑 이미 관리자로 로그인되어 있습니다.');
+        return;
+      }
+      document.getElementById('adminPasswordInput').value = '';
+      document.getElementById('adminModal').classList.remove('hidden');
+      setTimeout(() => document.getElementById('adminPasswordInput').focus(), 100);
+    }
+
+    function closeAdminModal() {
+      document.getElementById('adminModal').classList.add('hidden');
+    }
+
+    function submitAdminPassword() {
+      const pwd = document.getElementById('adminPasswordInput').value.trim();
+      if (pwd === '1122') {
+        isAdmin = true;
+        closeAdminModal();
+        document.getElementById('adminBanner').classList.remove('hidden');
+        renderRoster();
+        showToast('🔑 관리자 로그인 성공! (전원 초기화 및 수정 권한 활성화)');
+      } else {
+        showToast('❌ 비밀번호가 올바르지 않습니다.', 'error');
+      }
+    }
+
+    function logoutAdmin() {
+      isAdmin = false;
+      document.getElementById('adminBanner').classList.add('hidden');
+      renderRoster();
+      showToast('🔒 관리자 로그아웃 되었습니다.');
+    }
+
+    function resetAllVotes() {
+      if (!isAdmin) return;
+      if (confirm("⚠️ 정말로 모든 회원의 투표 현황 및 의견을 초기화하시겠습니까?\n(1인1회 투표 기록도 함께 초기화됩니다.)")) {
+        localStorage.removeItem('oryang_v13_official');
+        localStorage.removeItem('oryang_global_venue_opinion');
+        localStorage.removeItem('oryang_my_voted_member');
+        document.getElementById('globalVenueInput').value = '';
+        const display = document.getElementById('savedVenueDisplay');
+        if (display) display.classList.add('hidden');
+        renderRoster();
+        showToast('🧹 모든 투표 현황 및 기록이 완벽하게 초기화되었습니다.');
+      }
+    }
+
+    // Check Blink trigger when select/count changes
+    function checkBlink(index) {
+      const selectEl = document.getElementById(`select_member_${index}`);
+      const countEl = document.getElementById(`count_member_${index}`);
+      const btn = document.getElementById(`btn_confirm_${index}`);
+      if (!selectEl || !btn) return;
+
+      const votes = getVotes();
+      const name = OFFICIAL_MEMBERS[index];
+      const savedVote = votes[name] || {};
+
+      const optionChanged = selectEl.value !== (savedVote.option || '');
+      const countChanged = countEl.value.trim() !== (savedVote.count || '');
+
+      // Blink if option is selected and values differ from saved vote
+      if (selectEl.value !== '' && (optionChanged || countChanged)) {
+        btn.classList.add('btn-blink');
+      } else {
+        btn.classList.remove('btn-blink');
+      }
     }
 
     function renderRoster() {
@@ -221,6 +359,7 @@
 
         const selectId = `select_member_${index}`;
         const countId = `count_member_${index}`;
+        const btnId = `btn_confirm_${index}`;
 
         return `
           <div class="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 p-3 sm:p-3.5 rounded-2xl ${isAnswered ? 'bg-indigo-50/40 border border-indigo-100' : 'bg-white border border-slate-100'} hover:border-indigo-300 transition">
@@ -235,8 +374,8 @@
             <div class="flex items-center gap-2 flex-1 justify-end">
               
               <!-- Attendance Dropdown -->
-              <select id="${selectId}" ${expired ? 'disabled' : ''}
-                class="bg-slate-50 border border-slate-200/90 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 cursor-pointer min-w-[125px] sm:min-w-[145px] ${expired ? 'opacity-60 cursor-not-allowed' : ''}">
+              <select id="${selectId}" ${expired && !isAdmin ? 'disabled' : ''} onchange="checkBlink(${index})"
+                class="bg-slate-50 border border-slate-200/90 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 cursor-pointer min-w-[125px] sm:min-w-[145px] ${(expired && !isAdmin) ? 'opacity-60 cursor-not-allowed' : ''}">
                 <option value="" ${currentOption === '' ? 'selected' : ''}>참석 여부 ∨</option>
                 <option value="d24" ${currentOption === 'd24' ? 'selected' : ''}>10/24(토) 참석</option>
                 <option value="d31" ${currentOption === 'd31' ? 'selected' : ''}>10/31(토) 참석</option>
@@ -245,15 +384,15 @@
 
               <!-- Companion Count Field (명) -->
               <div class="relative w-16 sm:w-20 shrink-0">
-                <input type="number" id="${countId}" min="0" max="10" placeholder="명" value="${currentCount}" ${expired ? 'disabled' : ''}
-                  class="w-full bg-slate-50 border border-slate-200/90 rounded-xl px-2.5 py-2 text-xs font-bold text-center text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 ${expired ? 'opacity-60 cursor-not-allowed' : ''}">
+                <input type="number" id="${countId}" min="0" max="10" placeholder="명" value="${currentCount}" ${expired && !isAdmin ? 'disabled' : ''} oninput="checkBlink(${index})"
+                  class="w-full bg-slate-50 border border-slate-200/90 rounded-xl px-2.5 py-2 text-xs font-bold text-center text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 ${(expired && !isAdmin) ? 'opacity-60 cursor-not-allowed' : ''}">
                 <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-slate-400 pointer-events-none font-medium">명</span>
               </div>
 
               <!-- Confirm Button (확인) -->
-              <button onclick="saveMemberRow('${name}', ${index})" ${expired ? 'disabled' : ''}
-                class="${expired ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : (isAnswered ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300')} px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition active:scale-95 shadow-2xs shrink-0">
-                ${expired ? '마감' : '확인'}
+              <button id="${btnId}" onclick="saveMemberRow('${name}', ${index})" ${expired && !isAdmin ? 'disabled' : ''}
+                class="${(expired && !isAdmin) ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : (isAnswered ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300')} px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition active:scale-95 shadow-2xs shrink-0">
+                ${(expired && !isAdmin) ? '마감' : '확인'}
               </button>
 
             </div>
@@ -271,13 +410,8 @@
     }
 
     function saveMemberRow(name, index) {
-      if (isExpired()) {
+      if (isExpired() && !isAdmin) {
         showToast('🔒 10월 21일(수) 23:59 마감 시간이 지나 수정할 수 없습니다.', 'error');
-        return;
-      }
-
-      if (!OFFICIAL_MEMBERS.includes(name)) {
-        showToast('❌ 에러: 등록된 오량 형제계 회원이 아닙니다.', 'error');
         return;
       }
 
@@ -292,9 +426,25 @@
         return;
       }
 
+      // 1인 1회 투표 제한 (관리자가 아닐 때 적용)
+      const myVoted = localStorage.getItem('oryang_my_voted_member');
+      if (!isAdmin && myVoted && myVoted !== name) {
+        alert(`⚠️ 1인 1회만 투표가 가능합니다.\n\n이미 [${myVoted}] 회원 항목으로 투표가 완료되었습니다.`);
+        showToast(`⚠️ 1인 1회만 투표 가능합니다. (기존: ${myVoted})`, 'error');
+        return;
+      }
+
       const votes = getVotes();
       votes[name] = { option, count, updatedAt: new Date().toISOString() };
       saveVotes(votes);
+
+      if (!isAdmin) {
+        localStorage.setItem('oryang_my_voted_member', name);
+      }
+
+      // 깜빡임 효과 제거
+      const btn = document.getElementById(`btn_confirm_${index}`);
+      if (btn) btn.classList.remove('btn-blink');
 
       renderRoster();
 
