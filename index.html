@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- KakaoTalk & Social Media Open Graph Meta Tags -->
-  <title>2026 오량 형제계 10월 모임 참석 파악 🍁</title>
-  <meta name="title" content="2026 오량 형제계 10월 모임 참석 파악 🍁">
-  <meta name="description" content="10월 24일(토) vs 10월 31일(토) 오량 형제계 회원 16명 참석 여부 파악 (수정 마감: 10월 21일 23:59)">
+  <title>2026 오량 형제계 10월 모임 참석 투표 🍁</title>
+  <meta name="title" content="2026 오량 형제계 10월 모임 참석 투표 🍁">
+  <meta name="description" content="10월 24일(토) vs 10월 31일(토) 오량 형제계 회원 16명 참석 여부 투표 (수정 마감: 10월 21일 23:59)">
   
   <!-- Open Graph / KakaoTalk -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://hanseokwon.github.io/meet2026/">
-  <meta property="og:title" content="2026 오량 형제계 10월 모임 참석 파악 🍁">
-  <meta property="og:description" content="10/24(토) vs 10/31(토) 회원 16명 참석 파악 (📢 10월 21일까지 수정 가능합니다)">
+  <meta property="og:title" content="2026 오량 형제계 10월 모임 참석 투표 🍁">
+  <meta property="og:description" content="10/24(토) vs 10/31(토) 회원 16명 참석 투표 (📢 10월 21일까지 수정 가능합니다)">
   <meta property="og:image" content="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80">
 
   <!-- Tailwind CSS -->
@@ -74,70 +74,77 @@
             <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-amber-300 text-xs font-bold mb-2">
               <span>🍁 2026 오량 형제계</span>
             </div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">10월 모임 참석 파악</h1>
-            <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-indigo-200 text-xs sm:text-sm mt-1.5 font-semibold">
+            <!-- Title changed to 10월 모임 참석 투표 -->
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">10월 모임 참석 투표</h1>
+            <div class="flex flex-col sm:flex-row sm:items-center gap-1.5 text-indigo-200 text-xs sm:text-sm mt-2 font-semibold">
               <span>📅 10. 24(토) vs 10. 31(토) 모임</span>
+              <span class="text-amber-300 font-bold bg-amber-950/60 px-2.5 py-0.5 rounded-md border border-amber-500/30 text-xs inline-block w-fit">
+                ⚠️ 아래 필독 사항 숙지
+              </span>
             </div>
           </div>
 
-          <!-- Actions Pill -->
+          <!-- Kakao Share Pill Button -->
           <div class="flex items-center gap-1.5">
-            <button onclick="shareKakao()" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-full text-xs font-bold backdrop-blur-md border border-white/20 transition active:scale-95">
+            <button onclick="shareKakao()" class="bg-white/10 hover:bg-white/20 text-white px-3.5 py-1.5 rounded-full text-xs font-bold backdrop-blur-md border border-white/20 transition active:scale-95">
               카톡 공유
-            </button>
-            <button onclick="openAdminModal()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 px-3 py-1.5 rounded-full text-xs font-black transition active:scale-95 shadow-md">
-              ⚙️ 관리자 메뉴
             </button>
           </div>
         </div>
       </header>
 
-      <!-- Dashboard Cards Section (날짜별 참석 인원 & 불참 인원 대시보드) -->
-      <div class="p-4 sm:p-5 bg-slate-50/80 border-b border-slate-200/80">
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+      <!-- Stat Dashboard Cards (3 Cards Placed Right Above Member #1 이경득) -->
+      <div class="p-4 sm:p-5 bg-white border-b border-slate-100">
+        <div class="grid grid-cols-3 gap-3 text-center">
           
-          <!-- Card 1: 10/24(토) Attending -->
-          <div class="bg-indigo-50/90 border border-indigo-200/80 rounded-2xl p-3 shadow-2xs">
-            <div class="text-[11px] font-extrabold text-indigo-700">10/24(토) 참석</div>
-            <div class="text-lg font-black text-indigo-950 mt-0.5">
-              <span id="statOct24" class="text-indigo-600 text-xl">0</span>명
+          <!-- Card 1: 참석 명수 (Soft Blue) -->
+          <div class="bg-blue-50/80 border border-blue-100 rounded-2xl p-4 shadow-2xs flex flex-col justify-center items-center">
+            <div class="text-xs font-bold text-blue-600 mb-1">참석 명수</div>
+            <div class="text-2xl sm:text-3xl font-black text-blue-900 leading-none">
+              <span id="statAttending">0</span><span class="text-lg sm:text-xl">명</span>
             </div>
-            <div id="subOct24" class="text-[10px] text-indigo-500 font-medium">동반 0명</div>
+            <div class="text-xs text-slate-400 font-normal mt-1">/ 16</div>
           </div>
 
-          <!-- Card 2: 10/31(토) Attending -->
-          <div class="bg-amber-50/90 border border-amber-200/80 rounded-2xl p-3 shadow-2xs">
-            <div class="text-[11px] font-extrabold text-amber-800">10/31(토) 참석</div>
-            <div class="text-lg font-black text-amber-950 mt-0.5">
-              <span id="statOct31" class="text-amber-700 text-xl">0</span>명
+          <!-- Card 2: 불참 인원 (Soft Red/Pink) -->
+          <div class="bg-rose-50/80 border border-rose-100 rounded-2xl p-4 shadow-2xs flex flex-col justify-center items-center">
+            <div class="text-xs font-bold text-rose-600 mb-1">불참 인원</div>
+            <div class="text-2xl sm:text-3xl font-black text-rose-700 leading-none">
+              <span id="statAbsent">0</span>
             </div>
-            <div id="subOct31" class="text-[10px] text-amber-600 font-medium">동반 0명</div>
           </div>
 
-          <!-- Card 3: Absent -->
-          <div class="bg-rose-50/90 border border-rose-200/80 rounded-2xl p-3 shadow-2xs">
-            <div class="text-[11px] font-extrabold text-rose-700">불참 인원</div>
-            <div class="text-lg font-black text-rose-950 mt-0.5">
-              <span id="statAbsent" class="text-rose-600 text-xl">0</span>명
+          <!-- Card 3: 미응답 (Soft Gray) -->
+          <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 shadow-2xs flex flex-col justify-center items-center">
+            <div class="text-xs font-bold text-slate-500 mb-1">미응답</div>
+            <div class="text-2xl sm:text-3xl font-black text-slate-800 leading-none">
+              <span id="statUnanswered">16</span>
             </div>
-            <div class="text-[10px] text-rose-400 font-medium">불참 응답</div>
-          </div>
-
-          <!-- Card 4: Unanswered -->
-          <div class="bg-slate-100 border border-slate-200/80 rounded-2xl p-3 shadow-2xs">
-            <div class="text-[11px] font-extrabold text-slate-600">미응답</div>
-            <div class="text-lg font-black text-slate-800 mt-0.5">
-              <span id="statUnanswered" class="text-slate-800 text-xl">16</span>명
-            </div>
-            <div class="text-[10px] text-slate-400 font-medium">총 16명 중</div>
           </div>
 
         </div>
       </div>
 
-      <!-- Member Roster Table (16 Official Members Only) -->
-      <div class="p-3 sm:p-5 space-y-3" id="memberListContainer">
-        <!-- Strictly generated for 16 official members -->
+      <!-- Member Roster Table (16 Official Members Starting with 1. 이경득, 16. 이경철) -->
+      <div class="p-3 sm:p-4 space-y-2.5" id="memberListContainer">
+        <!-- Generated strictly for 16 official members -->
+      </div>
+
+      <!-- Single Global Recommendation Field (Planted Once at the Very Bottom) -->
+      <div class="mx-3 sm:mx-4 mb-4 p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-2">
+        <label for="globalVenueInput" class="block text-xs font-bold text-slate-700 flex items-center gap-1.5">
+          <span>💡</span> 장소 추천 / 한줄 의견 (모임 의견)
+        </label>
+        <div class="flex gap-2">
+          <input type="text" id="globalVenueInput" placeholder="예: 10월 21일 유성 인근 맛집 추천" 
+            class="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-medium text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10">
+          <button onclick="saveGlobalVenue()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition active:scale-95 shrink-0">
+            저장
+          </button>
+        </div>
+        <div id="savedVenueDisplay" class="text-[11px] text-indigo-700 font-semibold pt-1 hidden">
+          💬 등록된 의견: <span id="savedVenueText" class="text-slate-700"></span>
+        </div>
       </div>
 
     </div>
@@ -149,10 +156,9 @@
         필독 안내사항
       </h3>
       <ul class="text-slate-300 space-y-1.5 pl-4 list-disc leading-relaxed font-medium text-[11.5px]">
-        <li>오량 형제계 공식 회원 <b>16명 전용</b> 참석 파악 페이지입니다.</li>
+        <li>오량 형제계 공식 회원 <b>16명 전용</b> 참석 투표 페이지입니다.</li>
         <li><b>📢 10월 21일(수) 23:59까지 수정 가능합니다.</b> (이후에는 선택 및 수정 불가)</li>
         <li>원활한 모임 준비를 위해 본인 성함 우측의 <b>참석 여부</b> 선택 후 <b>[확인]</b>을 눌러주세요.</li>
-        <li>장소 추천 / 한줄 의견 예시: <code>예: 10월 21일</code></li>
       </ul>
       <div class="pt-2 text-[10px] text-slate-500 text-center border-t border-slate-800">
         hanseokwon.github.io/meet2026/ | 오량 형제계 10월 모임 시스템
@@ -161,74 +167,24 @@
 
   </div>
 
-  <!-- Admin Modal (Password: 1122) -->
-  <div id="adminModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-all duration-200">
-    <div class="bg-white rounded-3xl p-5 sm:p-6 max-w-sm w-full shadow-2xl border border-slate-200 space-y-4 transform scale-95 transition-all duration-200" id="adminModalCard">
-      
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h3 class="text-lg font-black text-slate-900 flex items-center gap-2">
-          <span>⚙️</span> 관리자 인증 및 메뉴
-        </h3>
-        <button onclick="closeAdminModal()" class="text-slate-400 hover:text-slate-600 font-bold p-1">✕</button>
-      </div>
-
-      <!-- Admin Login Box -->
-      <div id="adminLoginBox" class="space-y-3">
-        <p class="text-xs text-slate-600 font-medium">관리자 비밀번호를 입력해 주세요 (1122)</p>
-        <input type="password" id="adminPasswordInput" placeholder="비밀번호 입력" 
-          class="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-bold focus:outline-none focus:border-indigo-500">
-        <button onclick="checkAdminPassword()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs rounded-xl shadow-xs transition">
-          관리자 로그인
-        </button>
-      </div>
-
-      <!-- Admin Menu Panel -->
-      <div id="adminPanelBox" class="hidden space-y-3">
-        <div class="p-3 bg-emerald-50 rounded-2xl border border-emerald-200 text-emerald-950 text-xs font-bold flex items-center gap-2">
-          <span>✅</span> 관리자로 인증 되었습니다.
-        </div>
-
-        <div class="space-y-2">
-          <button onclick="resetAllVotesOnce()" class="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs rounded-2xl shadow-sm transition flex items-center justify-center gap-1.5">
-            <span>🧹</span> 전체 데이터 한번에 초기화 (0표로 리셋)
-          </button>
-          
-          <button onclick="toggleForceDeadline()" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs rounded-2xl shadow-sm transition flex items-center justify-center gap-1.5">
-            <span>🔓</span> 마감시간 관리자 강제 해제/수정
-          </button>
-        </div>
-
-        <div class="pt-2 text-right">
-          <button onclick="closeAdminModal()" class="text-xs text-slate-500 underline font-medium">닫기</button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
   <script>
-    ['oryang_votes_2026_10', 'oryang_votes_2026_10_two_dates', 'oryang_votes_2026_10_sample', 'oryang_16_table_votes', 'oryang_strict_votes_clean', 'oryang_16_clean_v6', 'oryang_16_clean_v7', 'oryang_clean_v8_strict', 'oryang_v9_clean'].forEach(k => {
-      try { localStorage.removeItem(k); } catch(e) {}
-    });
-
+    // Official 16 Members Roster (#16 updated to 이경철)
     const OFFICIAL_MEMBERS = [
       '이경득', '이경률', '김주식', '이경석',
       '반병주', '정성대', '이경호', '김금순',
       '이재성', '이동관', '한석원', '강양수',
-      '황두호', '이성근', '이경수', '이정걸'
+      '황두호', '이성근', '이경수', '이경철'
     ];
 
     // Modification Deadline: 2026-10-21 23:59:59
     const DEADLINE = new Date('2026-10-21T23:59:59');
-    let isAdminOverride = false;
 
     function isExpired() {
-      if (isAdminOverride) return false;
       return new Date() > DEADLINE;
     }
 
     function getVotes() {
-      const stored = localStorage.getItem('oryang_v11_strict1122');
+      const stored = localStorage.getItem('oryang_v13_official');
       if (stored) {
         try { return JSON.parse(stored); } catch(e) {}
       }
@@ -236,7 +192,7 @@
     }
 
     function saveVotes(votes) {
-      localStorage.setItem('oryang_v11_strict1122', JSON.stringify(votes));
+      localStorage.setItem('oryang_v13_official', JSON.stringify(votes));
     }
 
     function renderRoster() {
@@ -244,87 +200,74 @@
       const container = document.getElementById('memberListContainer');
       const expired = isExpired();
 
-      let oct24Members = 0;
-      let oct24Companions = 0;
-      let oct31Members = 0;
-      let oct31Companions = 0;
-      let absentMembers = 0;
+      let attendingCount = 0;
+      let absentCount = 0;
       let totalAnswered = 0;
 
       container.innerHTML = OFFICIAL_MEMBERS.map((name, index) => {
         const v = votes[name] || {};
         const currentOption = v.option || '';
         const currentCount = v.count || '';
-        const currentComment = v.comment || '';
 
         const isAnswered = Boolean(currentOption);
         if (isAnswered) {
           totalAnswered += 1;
-          const countNum = parseInt(currentCount) || 0;
-
-          if (currentOption === 'd24') {
-            oct24Members += 1;
-            oct24Companions += countNum;
-          } else if (currentOption === 'd31') {
-            oct31Members += 1;
-            oct31Companions += countNum;
+          if (currentOption === 'd24' || currentOption === 'd31') {
+            attendingCount += 1;
           } else if (currentOption === 'd_none') {
-            absentMembers += 1;
+            absentCount += 1;
           }
         }
 
+        const selectId = `select_member_${index}`;
+        const countId = `count_member_${index}`;
+
         return `
-          <div class="p-3 sm:p-3.5 rounded-2xl ${isAnswered ? 'bg-indigo-50/40 border border-indigo-100' : 'bg-white border border-slate-100'} hover:border-indigo-300 transition space-y-2">
+          <div class="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 p-3 sm:p-3.5 rounded-2xl ${isAnswered ? 'bg-indigo-50/40 border border-indigo-100' : 'bg-white border border-slate-100'} hover:border-indigo-300 transition">
             
-            <div class="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
-              <div class="w-28 sm:w-32 font-extrabold text-sm sm:text-base text-slate-900 flex items-center gap-1.5 shrink-0">
-                <span class="text-xs text-slate-400 font-semibold">${index + 1}.</span>
-                <span>${name}</span>
-                <span class="text-[10px] text-indigo-600 bg-indigo-50 px-1.5 py-0.2 rounded border border-indigo-200 font-bold">회원</span>
-              </div>
-
-              <div class="flex items-center gap-2 flex-1 justify-end">
-                <select id="select_${index}" ${expired ? 'disabled' : ''}
-                  class="bg-slate-50 border border-slate-200/90 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 cursor-pointer min-w-[125px] sm:min-w-[145px] ${expired ? 'opacity-60 cursor-not-allowed' : ''}">
-                  <option value="" ${currentOption === '' ? 'selected' : ''}>참석 여부 ∨</option>
-                  <option value="d24" ${currentOption === 'd24' ? 'selected' : ''}>10/24(토) 참석</option>
-                  <option value="d31" ${currentOption === 'd31' ? 'selected' : ''}>10/31(토) 참석</option>
-                  <option value="d_none" ${currentOption === 'd_none' ? 'selected' : ''}>불참</option>
-                </select>
-
-                <div class="relative w-16 sm:w-20 shrink-0">
-                  <input type="number" id="count_${index}" min="0" max="10" placeholder="명" value="${currentCount}" ${expired ? 'disabled' : ''}
-                    class="w-full bg-slate-50 border border-slate-200/90 rounded-xl px-2.5 py-2 text-xs font-bold text-center text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 ${expired ? 'opacity-60 cursor-not-allowed' : ''}">
-                  <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-slate-400 pointer-events-none font-medium">명</span>
-                </div>
-
-                <button onclick="saveMemberRow('${name}', ${index})" ${expired ? 'disabled' : ''}
-                  class="${expired ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : (isAnswered ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300')} px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition active:scale-95 shadow-2xs shrink-0">
-                  ${expired ? '마감' : '확인'}
-                </button>
-              </div>
+            <!-- Member Name -->
+            <div class="w-28 sm:w-32 font-extrabold text-sm sm:text-base text-slate-900 flex items-center gap-1.5 shrink-0">
+              <span class="text-xs text-slate-400 font-semibold">${index + 1}.</span>
+              <span>${name}</span>
             </div>
 
-            <div class="pt-1 flex items-center gap-2">
-              <span class="text-[11px] font-bold text-slate-500 shrink-0">장소 추천 / 한줄 의견:</span>
-              <input type="text" id="comment_${index}" placeholder="예: 10월 21일" value="${currentComment}" ${expired ? 'disabled' : ''}
-                class="flex-1 bg-slate-50/80 border border-slate-200/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-indigo-500 ${expired ? 'opacity-60 cursor-not-allowed' : ''}">
-            </div>
+            <!-- Controls Group -->
+            <div class="flex items-center gap-2 flex-1 justify-end">
+              
+              <!-- Attendance Dropdown -->
+              <select id="${selectId}" ${expired ? 'disabled' : ''}
+                class="bg-slate-50 border border-slate-200/90 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 cursor-pointer min-w-[125px] sm:min-w-[145px] ${expired ? 'opacity-60 cursor-not-allowed' : ''}">
+                <option value="" ${currentOption === '' ? 'selected' : ''}>참석 여부 ∨</option>
+                <option value="d24" ${currentOption === 'd24' ? 'selected' : ''}>10/24(토) 참석</option>
+                <option value="d31" ${currentOption === 'd31' ? 'selected' : ''}>10/31(토) 참석</option>
+                <option value="d_none" ${currentOption === 'd_none' ? 'selected' : ''}>불참</option>
+              </select>
 
+              <!-- Companion Count Field (명) -->
+              <div class="relative w-16 sm:w-20 shrink-0">
+                <input type="number" id="${countId}" min="0" max="10" placeholder="명" value="${currentCount}" ${expired ? 'disabled' : ''}
+                  class="w-full bg-slate-50 border border-slate-200/90 rounded-xl px-2.5 py-2 text-xs font-bold text-center text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 ${expired ? 'opacity-60 cursor-not-allowed' : ''}">
+                <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-slate-400 pointer-events-none font-medium">명</span>
+              </div>
+
+              <!-- Confirm Button (확인) -->
+              <button onclick="saveMemberRow('${name}', ${index})" ${expired ? 'disabled' : ''}
+                class="${expired ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : (isAnswered ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300')} px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition active:scale-95 shadow-2xs shrink-0">
+                ${expired ? '마감' : '확인'}
+              </button>
+
+            </div>
           </div>
         `;
       }).join('');
 
-      // Update Dashboard Stats
+      // Update 3 Stat Cards
       const unansweredCount = 16 - totalAnswered;
-      document.getElementById('statOct24').textContent = oct24Members;
-      document.getElementById('subOct24').textContent = `동반 ${oct24Companions}명`;
-
-      document.getElementById('statOct31').textContent = oct31Members;
-      document.getElementById('subOct31').textContent = `동반 ${oct31Companions}명`;
-
-      document.getElementById('statAbsent').textContent = absentMembers;
+      document.getElementById('statAttending').textContent = attendingCount;
+      document.getElementById('statAbsent').textContent = absentCount;
       document.getElementById('statUnanswered').textContent = unansweredCount;
+
+      loadGlobalVenue();
     }
 
     function saveMemberRow(name, index) {
@@ -338,13 +281,11 @@
         return;
       }
 
-      const selectEl = document.getElementById(`select_${index}`);
-      const countEl = document.getElementById(`count_${index}`);
-      const commentEl = document.getElementById(`comment_${index}`);
+      const selectEl = document.getElementById(`select_member_${index}`);
+      const countEl = document.getElementById(`count_member_${index}`);
 
       const option = selectEl.value;
       const count = countEl.value.trim();
-      const comment = commentEl.value.trim();
 
       if (!option) {
         showToast(`⚠️ ${name} 회원님의 참석 여부를 선택해 주세요.`);
@@ -352,7 +293,7 @@
       }
 
       const votes = getVotes();
-      votes[name] = { option, count, comment, updatedAt: new Date().toISOString() };
+      votes[name] = { option, count, updatedAt: new Date().toISOString() };
       saveVotes(votes);
 
       renderRoster();
@@ -361,49 +302,32 @@
       if (option === 'd24') optionText = '10/24(토) 참석';
       else if (option === 'd31') optionText = '10/31(토) 참석';
 
-      showToast(`✅ ${name} 회원님: [${optionText}${count ? ', 동반 ' + count + '명' : ''}] 완료!`);
+      showToast(`✅ ${name} 회원님: [${optionText}${count ? ', 동반 ' + count + '명' : ''}] 등록 완료!`);
     }
 
-    function openAdminModal() {
-      const modal = document.getElementById('adminModal');
-      const card = document.getElementById('adminModalCard');
-      modal.classList.remove('opacity-0', 'pointer-events-none');
-      card.classList.remove('scale-95');
-      card.classList.add('scale-100');
-    }
-
-    function closeAdminModal() {
-      const modal = document.getElementById('adminModal');
-      const card = document.getElementById('adminModalCard');
-      card.classList.remove('scale-100');
-      card.classList.add('scale-95');
-      modal.classList.add('opacity-0', 'pointer-events-none');
-    }
-
-    function checkAdminPassword() {
-      const pass = document.getElementById('adminPasswordInput').value;
-      if (pass === '1122') {
-        document.getElementById('adminLoginBox').classList.add('hidden');
-        document.getElementById('adminPanelBox').classList.remove('hidden');
-        showToast('🔓 관리자로 접근 권한이 승인되었습니다.');
-      } else {
-        showToast('❌ 비밀번호가 올바르지 않습니다. (1122)', 'error');
+    // Global Single Venue Recommendation Functions
+    function saveGlobalVenue() {
+      const input = document.getElementById('globalVenueInput');
+      const val = input.value.trim();
+      if (!val) {
+        showToast('⚠️ 장소 추천 의견을 입력해 주세요.');
+        return;
       }
+      localStorage.setItem('oryang_global_venue_opinion', val);
+      loadGlobalVenue();
+      showToast('✨ 장소 추천 의견이 저장되었습니다!');
     }
 
-    function resetAllVotesOnce() {
-      if (confirm('전체 회원 투표 데이터를 즉시 0표 상태로 한번에 초기화하시겠습니까?')) {
-        localStorage.setItem('oryang_v11_strict1122', JSON.stringify({}));
-        renderRoster();
-        showToast('🧹 전체 투표 데이터가 0표로 한번에 초기화되었습니다!');
-        closeAdminModal();
+    function loadGlobalVenue() {
+      const val = localStorage.getItem('oryang_global_venue_opinion');
+      const display = document.getElementById('savedVenueDisplay');
+      const text = document.getElementById('savedVenueText');
+      const input = document.getElementById('globalVenueInput');
+      if (val) {
+        text.textContent = val;
+        display.classList.remove('hidden');
+        if (input) input.value = val;
       }
-    }
-
-    function toggleForceDeadline() {
-      isAdminOverride = !isAdminOverride;
-      renderRoster();
-      showToast(isAdminOverride ? '🔓 관리자 권한으로 수정 제한이 해제되었습니다.' : '🔒 수정 제한이 다시 설정되었습니다.');
     }
 
     function showToast(msg, type = 'normal') {
