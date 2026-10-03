@@ -1,595 +1,1656 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- KakaoTalk & Social Media Open Graph Meta Tags -->
-  <title>2026 오량 형제계 10월 모임 참석 투표 🍁</title>
-  <meta name="title" content="2026 오량 형제계 10월 모임 참석 투표 🍁">
-  <meta name="description" content="10월 24일(토) vs 10월 31일(토) 오량 형제계 회원 16명 참석 여부 투표 (수정 마감: 10월 21일 23:59)">
-  
-  <!-- Open Graph / KakaoTalk -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://hanseokwon.github.io/meet2026/">
-  <meta property="og:title" content="2026 오량 형제계 10월 모임 참석 투표 🍁">
-  <meta property="og:description" content="10/24(토) vs 10/31(토) 회원 16명 참석 투표 (📢 10월 21일까지 수정 가능합니다)">
-  <meta property="og:image" content="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Tailwind CSS -->
+  <title>오량 형제계 2026년 모임 참석 투표</title>
+
+  <meta
+    name="description"
+    content="오량 형제계 공식 회원 16명의 2026년 모임 참석 여부 실시간 투표 페이지"
+  />
+
+  <meta property="og:title" content="오량 형제계 2026년 모임 참석 투표" />
+  <meta
+    property="og:description"
+    content="10월 24일 또는 10월 31일 모임 참석 여부를 선택해주세요."
+  />
+  <meta property="og:type" content="website" />
+
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
+
   <style>
     body {
-      font-family: 'Noto Sans KR', sans-serif;
-      background-color: #f1f5f9;
-      color: #0f172a;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Noto Sans KR",
+        "Malgun Gothic",
+        sans-serif;
     }
-    .shadow-card {
-      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+
+    .glass {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
-    
-    /* Blinking animation for [확인] button when option is changed */
-    @keyframes pulse-blink {
-      0%, 100% {
-        background-color: #f59e0b;
-        color: #0f172a;
-        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.8);
-        transform: scale(1);
+
+    .blink {
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%,
+      100% {
+        opacity: 1;
       }
       50% {
-        background-color: #dc2626;
-        color: #ffffff;
-        box-shadow: 0 0 14px 4px rgba(220, 38, 38, 0.5);
-        transform: scale(1.08);
+        opacity: 0.35;
       }
     }
-    .btn-blink {
-      animation: pulse-blink 0.75s infinite ease-in-out !important;
-      font-weight: 900 !important;
+
+    .admin-panel {
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen pb-16 selection:bg-indigo-600 selection:text-white">
 
-  <!-- Toast Notification -->
-  <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3.5 rounded-2xl shadow-2xl border border-slate-700 text-sm font-bold opacity-0 pointer-events-none transition-all duration-300 transform -translate-y-4 z-50 flex items-center gap-3">
-    <span class="text-base" id="toastIcon">📋</span>
-    <span id="toastMsg">처리되었습니다!</span>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 text-gray-800">
+
+  <!-- 상단 안내 -->
+  <div class="bg-blue-600 text-white text-center py-2 px-4 text-sm font-semibold">
+    📢 10월 11일(일) 23:59까지 수정 가능합니다.
   </div>
 
-  <!-- Admin Login Modal -->
-  <div id="adminModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-200 space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
-          <span>🔑</span> 관리자 접속
-        </h3>
-        <button onclick="closeAdminModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
+  <!-- 관리자 상태 -->
+  <div
+    id="adminBanner"
+    class="hidden bg-red-600 text-white text-center py-2 px-4 text-sm font-bold admin-panel"
+  >
+    🔐 관리자 로그인 상태 (모든 수정 가능)
+  </div>
+
+  <main class="max-w-5xl mx-auto px-4 py-6">
+
+    <!-- 제목 -->
+    <section class="text-center mb-6">
+
+      <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-bold mb-3">
+        👨‍👨‍👦 오량 형제계
       </div>
-      <p class="text-xs text-slate-500 font-medium leading-relaxed">
-        관리자 비밀번호 4자리를 입력해주세요.
+
+      <h1 class="text-3xl md:text-4xl font-black text-gray-900 mb-3">
+        2026년 모임 참석 투표
+      </h1>
+
+      <p class="text-gray-600">
+        10. 24(토) vs 10. 31(토) 모임
       </p>
-      <div>
-        <input type="password" id="adminPasswordInput" placeholder="비밀번호 입력" 
-          onkeydown="if(event.key==='Enter') submitAdminPassword()"
-          class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-3 text-base font-bold text-center tracking-widest text-slate-900 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-500/20">
+
+    </section>
+
+
+    <!-- 안내 -->
+    <section class="glass rounded-2xl shadow-lg border border-blue-100 p-5 mb-6">
+
+      <div class="flex items-start gap-3">
+
+        <div class="text-2xl">
+          📋
+        </div>
+
+        <div class="flex-1">
+
+          <h2 class="font-bold text-lg text-gray-900 mb-2">
+            투표 안내
+          </h2>
+
+          <ul class="text-sm text-gray-600 space-y-2">
+
+            <li>
+              • 오량 형제계 공식 회원 16명 전용 참석 투표 페이지입니다.
+            </li>
+
+            <li>
+              • 본인 성함 항목에서 참석 여부를 선택해 주세요.
+            </li>
+
+            <li>
+              • 마감 전에는 일정 변경 시 언제든 다시 수정할 수 있습니다.
+            </li>
+
+            <li class="font-bold text-red-600">
+              • 📢 10월 11일(일) 23:59까지 수정 가능합니다.
+            </li>
+
+            <li>
+              • 참석 여부 선택 후 <b>[확인]</b> 버튼을 눌러야 최종 반영됩니다.
+            </li>
+
+            <li>
+              • 투표 결과는 회원 모두에게 실시간으로 공유됩니다.
+            </li>
+
+          </ul>
+
+        </div>
       </div>
-      <div class="flex gap-2 pt-1">
-        <button onclick="closeAdminModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs py-3 rounded-xl transition">취소</button>
-        <button onclick="submitAdminPassword()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-3 rounded-xl transition shadow-md">확인</button>
+    </section>
+
+
+    <!-- 실시간 집계 -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+
+      <!-- 10/24 -->
+      <div class="bg-white rounded-2xl shadow-md border border-blue-100 p-4 text-center">
+
+        <div class="text-sm text-gray-500 mb-1">
+          10월 24일
+        </div>
+
+        <div
+          id="count1024"
+          class="text-3xl font-black text-blue-600"
+        >
+          0명
+        </div>
+
+        <div class="text-xs text-gray-400 mt-1">
+          참석 예정
+        </div>
+
       </div>
+
+
+      <!-- 10/31 -->
+      <div class="bg-white rounded-2xl shadow-md border border-indigo-100 p-4 text-center">
+
+        <div class="text-sm text-gray-500 mb-1">
+          10월 31일
+        </div>
+
+        <div
+          id="count1031"
+          class="text-3xl font-black text-indigo-600"
+        >
+          0명
+        </div>
+
+        <div class="text-xs text-gray-400 mt-1">
+          참석 예정
+        </div>
+
+      </div>
+
+
+      <!-- 총 참석 -->
+      <div class="bg-white rounded-2xl shadow-md border border-green-100 p-4 text-center">
+
+        <div class="text-sm text-gray-500 mb-1">
+          총 참석
+        </div>
+
+        <div
+          id="countAttend"
+          class="text-3xl font-black text-green-600"
+        >
+          0명
+        </div>
+
+        <div class="text-xs text-gray-400 mt-1">
+          인원
+        </div>
+
+      </div>
+
+
+      <!-- 불참 -->
+      <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-4 text-center">
+
+        <div class="text-sm text-gray-500 mb-1">
+          불참
+        </div>
+
+        <div
+          id="countAbsent"
+          class="text-3xl font-black text-gray-500"
+        >
+          0명
+        </div>
+
+        <div class="text-xs text-gray-400 mt-1">
+          회원
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Firebase 상태 -->
+    <div
+      id="firebaseStatus"
+      class="mb-5 rounded-xl bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 text-sm text-center"
+    >
+      🔄 실시간 데이터를 불러오는 중입니다...
     </div>
-  </div>
 
-  <div class="max-w-xl mx-auto px-3 sm:px-4 pt-4 sm:pt-6 space-y-3.5">
 
-    <!-- Top Notice Banner for Members -->
-    <div class="bg-amber-500 text-slate-950 px-4 py-2.5 rounded-2xl font-black text-xs sm:text-sm flex items-center justify-between shadow-md">
-      <div class="flex items-center gap-2">
-        <span class="text-base">📢</span>
-        <span><b>10월 11일(일) 23:59까지</b> 수정 가능합니다.</span>
-      </div>
-      <span class="bg-slate-950 text-amber-300 text-[10px] px-2 py-0.5 rounded-full font-bold">기한 엄수</span>
-    </div>
+    <!-- 회원 투표 -->
+    <section class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
 
-    <!-- Admin Status Banner (Visible when logged in as admin) -->
-    <div id="adminBanner" class="bg-indigo-900 text-white px-4 py-3 rounded-2xl flex items-center justify-between shadow-md border border-indigo-700 hidden">
-      <div class="flex items-center gap-2 text-xs font-extrabold text-amber-300">
-        <span>🔑</span>
-        <span>관리자 로그인 상태 (1인1회 제한 해제 / 모든 수정 가능)</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <button onclick="resetAllVotes()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition active:scale-95 shadow-sm flex items-center gap-1">
-          <span>🔄</span> 전체 초기화
-        </button>
-        <button onclick="logoutAdmin()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold px-2.5 py-1.5 rounded-xl transition">
-          로그아웃
-        </button>
-      </div>
-    </div>
+      <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-5">
 
-    <!-- Main Container Card -->
-    <div class="bg-white rounded-3xl shadow-card border border-slate-200/80 overflow-hidden">
-      
-      <!-- Top Banner Header -->
-      <header class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 text-white p-6 relative overflow-hidden">
-        <div class="flex items-start justify-between relative z-10">
+        <div class="flex items-center justify-between">
+
           <div>
-            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-amber-300 text-xs font-bold mb-2">
-              <span>🍁 2026 오량 형제계</span>
-            </div>
-            <!-- Title: 10월 모임 참석 투표 -->
-            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">10월 모임 참석 투표</h1>
-            <div class="flex flex-col sm:flex-row sm:items-center gap-1.5 text-indigo-200 text-xs sm:text-sm mt-2 font-semibold">
-              <span>📅 10. 24(토) vs 10. 31(토) 모임</span>
-              <span class="text-amber-300 font-bold bg-amber-950/60 px-2.5 py-0.5 rounded-md border border-amber-500/30 text-xs inline-block w-fit">
-                ⚠️ 아래 필독 사항 숙지
-              </span>
-            </div>
+            <h2 class="text-xl font-black">
+              👥 회원별 참석 여부
+            </h2>
+
+            <p class="text-blue-100 text-sm mt-1">
+              본인 이름에서 참석 여부를 선택하세요.
+            </p>
           </div>
 
-          <!-- Buttons Group (Admin & Kakao Share) -->
-          <div class="flex items-center gap-1.5">
-            <button onclick="openAdminModal()" class="bg-amber-400 hover:bg-amber-500 text-slate-950 px-3 py-1.5 rounded-full text-xs font-black transition active:scale-95 shadow-xs">
-              🔑 관리자
-            </button>
-            <button onclick="shareKakao()" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-full text-xs font-bold backdrop-blur-md border border-white/20 transition active:scale-95">
-              카톡 공유
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <!-- Date Attendance Summary Cards (Placed strictly between Header and 3 Stat Cards) -->
-      <div class="p-4 sm:p-5 bg-gradient-to-b from-indigo-50/80 to-slate-50 border-b border-indigo-100">
-        <div class="text-xs font-extrabold text-indigo-900 mb-2.5 flex items-center justify-between">
-          <div class="flex items-center gap-1.5">
-            <span class="text-sm">🗓️</span>
-            <span>날짜별 참석 인원 취합</span>
-          </div>
-          <span class="text-[10px] text-indigo-500 font-semibold">(실시간 집계)</span>
-        </div>
-        <div class="grid grid-cols-2 gap-3 text-center">
-          
-          <!-- Card 1: 10.24(토) 선택 인원 -->
-          <div class="bg-white border-2 border-indigo-200 hover:border-indigo-500 rounded-2xl p-4 shadow-sm transition flex flex-col items-center justify-center">
-            <div class="text-xs sm:text-sm font-bold text-indigo-800 flex items-center gap-1">
-              <span>📅</span> 10.24(토) 선택 인원
-            </div>
-            <div class="text-2xl sm:text-3xl font-black text-indigo-950 leading-none mt-2">
-              <span id="statDate24" class="text-indigo-600">0</span><span class="text-base sm:text-lg text-indigo-900">명</span>
-            </div>
-          </div>
-
-          <!-- Card 2: 10.31(토) 선택 인원 -->
-          <div class="bg-white border-2 border-indigo-200 hover:border-indigo-500 rounded-2xl p-4 shadow-sm transition flex flex-col items-center justify-center">
-            <div class="text-xs sm:text-sm font-bold text-indigo-800 flex items-center gap-1">
-              <span>📅</span> 10.31(토) 선택 인원
-            </div>
-            <div class="text-2xl sm:text-3xl font-black text-indigo-950 leading-none mt-2">
-              <span id="statDate31" class="text-indigo-600">0</span><span class="text-base sm:text-lg text-indigo-900">명</span>
-            </div>
+          <div class="text-2xl">
+            📊
           </div>
 
         </div>
+
       </div>
 
-      <!-- Stat Dashboard Cards (3 Cards: 총 참석 인원, 불참 인원, 미응답) -->
-      <div class="p-4 sm:p-5 bg-white border-b border-slate-100">
-        <div class="grid grid-cols-3 gap-3 text-center">
-          
-          <!-- Card 1: 총 참석 인원 (Soft Blue) -->
-          <div class="bg-blue-50/80 border border-blue-100 rounded-2xl p-4 shadow-2xs flex flex-col justify-center items-center">
-            <div class="text-xs font-bold text-blue-600 mb-1">총 참석 인원</div>
-            <div class="text-2xl sm:text-3xl font-black text-blue-900 leading-none">
-              <span id="statAttending">0</span><span class="text-lg sm:text-xl">명</span>
-            </div>
-            <div class="text-xs text-slate-400 font-normal mt-1" id="statAttendingSub">회원 0 / 16</div>
-          </div>
 
-          <!-- Card 2: 불참 인원 (Soft Red/Pink) -->
-          <div class="bg-rose-50/80 border border-rose-100 rounded-2xl p-4 shadow-2xs flex flex-col justify-center items-center">
-            <div class="text-xs font-bold text-rose-600 mb-1">불참 인원</div>
-            <div class="text-2xl sm:text-3xl font-black text-rose-700 leading-none">
-              <span id="statAbsent">0</span>
-            </div>
-          </div>
+      <div id="roster" class="divide-y divide-gray-100">
+        <!-- JavaScript에서 생성 -->
+      </div>
 
-          <!-- Card 3: 미응답 (Soft Gray) -->
-          <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 shadow-2xs flex flex-col justify-center items-center">
-            <div class="text-xs font-bold text-slate-500 mb-1">미응답</div>
-            <div class="text-2xl sm:text-3xl font-black text-slate-800 leading-none">
-              <span id="statUnanswered">16</span>
-            </div>
-          </div>
+    </section>
 
+
+    <!-- 장소 의견 -->
+    <section class="bg-white rounded-2xl shadow-xl border border-gray-100 p-5 mt-6">
+
+      <div class="flex items-center gap-3 mb-4">
+
+        <div class="text-2xl">
+          📍
         </div>
-      </div>
 
-      <!-- Member Roster Table (16 Official Members Starting with 1. 이경득, 16. 이경철) -->
-      <div class="p-3 sm:p-4 space-y-2.5" id="memberListContainer">
-        <!-- Generated strictly for 16 official members -->
-      </div>
+        <div>
+          <h2 class="font-black text-lg">
+            모임 장소 의견
+          </h2>
 
-      <!-- Single Global Recommendation Field (Planted Once at the Very Bottom) -->
-      <div class="mx-3 sm:mx-4 mb-4 p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-2">
-        <label for="globalVenueInput" class="block text-xs font-bold text-slate-700 flex items-center gap-1.5">
-          <span>💡</span> 장소 추천 / 한줄 의견 (모임 의견)
-        </label>
-        <div class="flex gap-2">
-          <input type="text" id="globalVenueInput" placeholder="예: 10월 21일 유성 인근 맛집 추천" 
-            class="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-medium text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10">
-          <button onclick="saveGlobalVenue()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition active:scale-95 shrink-0">
-            저장
-          </button>
+          <p class="text-sm text-gray-500">
+            좋은 장소가 있다면 자유롭게 추천해주세요.
+          </p>
         </div>
-        <div id="savedVenueDisplay" class="text-[11px] text-indigo-700 font-semibold pt-1 hidden">
-          💬 등록된 의견: <span id="savedVenueText" class="text-slate-700"></span>
+
+      </div>
+
+
+      <div class="flex flex-col md:flex-row gap-3">
+
+        <input
+          id="venueInput"
+          type="text"
+          maxlength="200"
+          placeholder="예: 마산 인근 맛집 추천"
+          class="flex-1 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-400"
+        />
+
+        <button
+          onclick="saveGlobalVenue()"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl transition"
+        >
+          의견 저장
+        </button>
+
+      </div>
+
+
+      <div
+        id="venueDisplay"
+        class="hidden mt-4 bg-blue-50 border border-blue-100 rounded-xl p-4"
+      >
+        <div class="text-xs text-blue-500 font-bold mb-1">
+          현재 등록된 장소 의견
         </div>
+
+        <div
+          id="venueText"
+          class="font-semibold text-gray-800"
+        ></div>
       </div>
 
-    </div>
+    </section>
 
-    <!-- Notice Box -->
-    <div class="bg-slate-900 text-slate-200 rounded-3xl p-5 text-xs space-y-2.5 shadow-card border border-slate-800">
-      <h3 class="font-extrabold text-amber-400 text-sm flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
-        필독 안내사항
-      </h3>
-      <ul class="text-slate-300 space-y-1.5 pl-4 list-disc leading-relaxed font-medium text-[11.5px]">
-        <li>오량 형제계 공식 회원 <b>16명 전용</b> 참석 투표 페이지입니다.</li>
-        <li><b>1인 1회만 투표 가능</b>하며, 본인 성함 항목에서 투표를 진행해 주세요.</li>
-        <li><b>📢 10월 11일(일) 23:59까지 수정 가능합니다.</b></li>
-        <li>참석 여부 선택 후 <b>[확인] 버튼이 깜빡일 때 반드시 [확인]을 눌러야</b> 투표가 최종 반영됩니다.</li>
-      </ul>
-      <div class="pt-2 text-[10px] text-slate-500 text-center border-t border-slate-800">
-        hanseokwon.github.io/meet2026/ | 오량 형제계 10월 모임 시스템
+
+    <!-- 하단 기능 -->
+    <section class="flex flex-wrap justify-center gap-3 mt-6">
+
+      <button
+        onclick="copyLink()"
+        class="bg-white border border-gray-200 hover:bg-gray-50 px-5 py-3 rounded-xl font-bold shadow-sm"
+      >
+        🔗 링크 복사
+      </button>
+
+      <button
+        onclick="shareKakao()"
+        class="bg-yellow-400 hover:bg-yellow-500 px-5 py-3 rounded-xl font-bold shadow-sm"
+      >
+        💬 카카오톡 공유
+      </button>
+
+      <button
+        onclick="openAdminModal()"
+        class="bg-gray-800 hover:bg-gray-900 text-white px-5 py-3 rounded-xl font-bold shadow-sm"
+      >
+        🔐 관리자
+      </button>
+
+    </section>
+
+
+    <!-- 마감 안내 -->
+    <section class="text-center mt-6">
+
+      <div
+        id="deadlineText"
+        class="inline-block bg-red-50 text-red-600 border border-red-100 rounded-full px-5 py-2 text-sm font-bold"
+      >
+        ⏰ 수정 마감: 2026년 10월 11일 23:59
       </div>
+
+    </section>
+
+
+    <!-- 푸터 -->
+    <footer class="text-center text-xs text-gray-400 mt-8 pb-6">
+      오량 형제계 2026 · 실시간 참석 투표 시스템
+    </footer>
+
+  </main>
+
+
+  <!-- 관리자 모달 -->
+  <div
+    id="adminModal"
+    class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4"
+  >
+
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+
+      <div class="text-center mb-5">
+
+        <div class="text-4xl mb-2">
+          🔐
+        </div>
+
+        <h2 class="text-xl font-black">
+          관리자 로그인
+        </h2>
+
+        <p class="text-sm text-gray-500 mt-1">
+          관리자 비밀번호를 입력하세요.
+        </p>
+
+      </div>
+
+
+      <input
+        id="adminPassword"
+        type="password"
+        placeholder="비밀번호"
+        class="w-full border border-gray-200 rounded-xl px-4 py-3 mb-3 outline-none focus:ring-2 focus:ring-blue-400"
+        onkeydown="if(event.key==='Enter') submitAdminPassword()"
+      />
+
+
+      <div class="grid grid-cols-2 gap-3">
+
+        <button
+          onclick="closeAdminModal()"
+          class="border border-gray-200 rounded-xl py-3 font-bold"
+        >
+          취소
+        </button>
+
+        <button
+          onclick="submitAdminPassword()"
+          class="bg-gray-800 text-white rounded-xl py-3 font-bold"
+        >
+          로그인
+        </button>
+
+      </div>
+
     </div>
 
   </div>
 
-  <script>
-    // Official 16 Members Roster (#16 updated to 이경철)
+
+  <!-- 관리자 메뉴 -->
+  <div
+    id="adminTools"
+    class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-40 bg-white rounded-2xl shadow-2xl border border-red-200 px-4 py-3"
+  >
+
+    <div class="flex items-center gap-3">
+
+      <span class="text-sm font-bold text-red-600">
+        관리자
+      </span>
+
+      <button
+        onclick="resetAllVotes()"
+        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-bold"
+      >
+        전체 초기화
+      </button>
+
+      <button
+        onclick="logoutAdmin()"
+        class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg text-sm font-bold"
+      >
+        로그아웃
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- Firebase + 앱 코드 -->
+  <script type="module">
+
+    /* =========================================================
+       Firebase 설정
+    ========================================================= */
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+
+    import {
+      getDatabase,
+      ref,
+      set,
+      remove,
+      onValue
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+
+    const firebaseConfig = {
+
+      apiKey:
+        "AIzaSyCtGiUbLlXCfL6uLw3QU2l9KL-sz5AY-l8",
+
+      authDomain:
+        "meet2025-10b1d.firebaseapp.com",
+
+      projectId:
+        "meet2025-10b1d",
+
+      storageBucket:
+        "meet2025-10b1d.firebasestorage.app",
+
+      messagingSenderId:
+        "66238555779",
+
+      appId:
+        "1:66238555779:web:0a184486db2609d03addb6",
+
+      measurementId:
+        "G-NCE2GWQCM4",
+
+      databaseURL:
+        "https://meet2025-10b1d-default-rtdb.firebaseio.com/"
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+
+    const db = getDatabase(app);
+
+
+    /* =========================================================
+       Firebase 저장 위치
+    ========================================================= */
+
+    const votesRef =
+      ref(db, "meet2026/votes");
+
+    const venueRef =
+      ref(db, "meet2026/venue");
+
+
+    /* =========================================================
+       기본 설정
+    ========================================================= */
+
     const OFFICIAL_MEMBERS = [
-      '이경득', '이경률', '김주식', '이경석',
-      '반병주', '정성대', '이경호', '김금순',
-      '이재성', '이동관', '한석원', '강양수',
-      '황두호', '이성근', '이경수', '이경철'
+
+      "이경득",
+      "이경률",
+      "김주식",
+      "이경석",
+      "반병주",
+      "정성대",
+      "이경호",
+      "김금순",
+      "이재성",
+      "이동관",
+      "한석원",
+      "강양수",
+      "황두호",
+      "이성근",
+      "이경수",
+      "이경철"
+
     ];
 
-    // Modification Deadline: 2026-10-21 23:59:59
-    const DEADLINE = new Date('2026-10-21T23:59:59');
 
-    // Admin State
+    /*
+      ★ 실제 투표 수정 마감
+      2026년 10월 11일 23:59:59
+    */
+
+    const DEADLINE =
+      new Date("2026-10-11T23:59:59");
+
+
+    const ADMIN_PASSWORD =
+      "1122";
+
+
     let isAdmin = false;
 
+    let firebaseVotes = {};
+
+    let firebaseVenue = "";
+
+
+    /* =========================================================
+       마감 여부
+    ========================================================= */
+
     function isExpired() {
+
       return new Date() > DEADLINE;
+
     }
+
+
+    /* =========================================================
+       현재 투표 데이터
+    ========================================================= */
 
     function getVotes() {
-      const stored = localStorage.getItem('oryang_v13_official');
-      if (stored) {
-        try { return JSON.parse(stored); } catch(e) {}
+
+      return firebaseVotes || {};
+
+    }
+
+
+    /* =========================================================
+       토스트 메시지
+    ========================================================= */
+
+    function toast(message) {
+
+      const old =
+        document.getElementById("appToast");
+
+      if (old) {
+        old.remove();
       }
-      return {};
+
+
+      const div =
+        document.createElement("div");
+
+      div.id = "appToast";
+
+      div.className =
+        "fixed top-16 left-1/2 -translate-x-1/2 z-[100] bg-gray-900 text-white px-5 py-3 rounded-xl shadow-xl text-sm font-bold";
+
+
+      div.textContent =
+        message;
+
+
+      document.body.appendChild(div);
+
+
+      setTimeout(() => {
+
+        div.remove();
+
+      }, 2500);
+
     }
 
-    function saveVotes(votes) {
-      localStorage.setItem('oryang_v13_official', JSON.stringify(votes));
-    }
 
-    // Admin Modal Logic
-    function openAdminModal() {
-      if (isAdmin) {
-        showToast('🔑 이미 관리자로 로그인되어 있습니다.');
-        return;
-      }
-      document.getElementById('adminPasswordInput').value = '';
-      document.getElementById('adminModal').classList.remove('hidden');
-      setTimeout(() => document.getElementById('adminPasswordInput').focus(), 100);
-    }
+    /* =========================================================
+       Firebase 상태
+    ========================================================= */
 
-    function closeAdminModal() {
-      document.getElementById('adminModal').classList.add('hidden');
-    }
+    function setFirebaseStatus(message, type = "loading") {
 
-    function submitAdminPassword() {
-      const pwd = document.getElementById('adminPasswordInput').value.trim();
-      if (pwd === '1122') {
-        isAdmin = true;
-        closeAdminModal();
-        document.getElementById('adminBanner').classList.remove('hidden');
-        renderRoster();
-        showToast('🔑 관리자 로그인 성공! (전원 초기화 및 수정 권한 활성화)');
+      const el =
+        document.getElementById("firebaseStatus");
+
+      if (!el) return;
+
+
+      el.textContent =
+        message;
+
+
+      if (type === "success") {
+
+        el.className =
+          "mb-5 rounded-xl bg-green-50 border border-green-200 text-green-700 px-4 py-3 text-sm text-center";
+
+      } else if (type === "error") {
+
+        el.className =
+          "mb-5 rounded-xl bg-red-50 border border-red-200 text-red-700 px-4 py-3 text-sm text-center";
+
       } else {
-        showToast('❌ 비밀번호가 올바르지 않습니다.', 'error');
+
+        el.className =
+          "mb-5 rounded-xl bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 text-sm text-center";
+
       }
+
     }
 
-    function logoutAdmin() {
-      isAdmin = false;
-      document.getElementById('adminBanner').classList.add('hidden');
-      renderRoster();
-      showToast('🔒 관리자 로그아웃 되었습니다.');
+
+    /* =========================================================
+       숫자 표시
+    ========================================================= */
+
+    function updateSummary() {
+
+      const votes =
+        getVotes();
+
+
+      let count1024 = 0;
+
+      let count1031 = 0;
+
+      let totalAttend = 0;
+
+      let absent = 0;
+
+
+      OFFICIAL_MEMBERS.forEach(name => {
+
+        const vote =
+          votes[name];
+
+
+        if (!vote) {
+          return;
+        }
+
+
+        const count =
+          Number(vote.count || 1);
+
+
+        if (vote.option === "1024") {
+
+          count1024 += count;
+
+          totalAttend += count;
+
+        } else if (vote.option === "1031") {
+
+          count1031 += count;
+
+          totalAttend += count;
+
+        } else if (vote.option === "absent") {
+
+          absent += 1;
+
+        }
+
+      });
+
+
+      document.getElementById("count1024").textContent =
+        `${count1024}명`;
+
+      document.getElementById("count1031").textContent =
+        `${count1031}명`;
+
+      document.getElementById("countAttend").textContent =
+        `${totalAttend}명`;
+
+      document.getElementById("countAbsent").textContent =
+        `${absent}명`;
+
     }
 
-    function resetAllVotes() {
-      if (!isAdmin) return;
-      if (confirm("⚠️ 정말로 모든 회원의 투표 현황 및 의견을 초기화하시겠습니까?\n(1인1회 투표 기록도 함께 초기화됩니다.)")) {
-        localStorage.removeItem('oryang_v13_official');
-        localStorage.removeItem('oryang_global_venue_opinion');
-        localStorage.removeItem('oryang_my_voted_member');
-        document.getElementById('globalVenueInput').value = '';
-        const display = document.getElementById('savedVenueDisplay');
-        if (display) display.classList.add('hidden');
-        renderRoster();
-        showToast('🧹 모든 투표 현황 및 기록이 완벽하게 초기화되었습니다.');
-      }
-    }
 
-    // Check Blink trigger when select/count changes
-    function checkBlink(index) {
-      const selectEl = document.getElementById(`select_member_${index}`);
-      const countEl = document.getElementById(`count_member_${index}`);
-      const btn = document.getElementById(`btn_confirm_${index}`);
-      if (!selectEl || !btn) return;
-
-      const votes = getVotes();
-      const name = OFFICIAL_MEMBERS[index];
-      const savedVote = votes[name] || {};
-
-      const optionChanged = selectEl.value !== (savedVote.option || '');
-      const countChanged = countEl.value.trim() !== (savedVote.count || '');
-
-      // Blink if option is selected and values differ from saved vote
-      if (selectEl.value !== '' && (optionChanged || countChanged)) {
-        btn.classList.add('btn-blink');
-      } else {
-        btn.classList.remove('btn-blink');
-      }
-    }
+    /* =========================================================
+       회원 목록 그리기
+    ========================================================= */
 
     function renderRoster() {
-      const votes = getVotes();
-      const container = document.getElementById('memberListContainer');
-      const expired = isExpired();
 
-      let member24Count = 0;
-      let total24Headcount = 0;
+      const roster =
+        document.getElementById("roster");
 
-      let member31Count = 0;
-      let total31Headcount = 0;
+      if (!roster) return;
 
-      let absentCount = 0;
-      let totalAnswered = 0;
 
-      container.innerHTML = OFFICIAL_MEMBERS.map((name, index) => {
-        const v = votes[name] || {};
-        const currentOption = v.option || '';
-        const currentCountStr = (v.count || '').trim();
-        
-        let groupHeadcount = 1;
-        if (currentCountStr !== '') {
-          const parsed = parseInt(currentCountStr, 10);
-          if (!isNaN(parsed) && parsed > 0) {
-            groupHeadcount = parsed;
-          }
-        }
+      const votes =
+        getVotes();
 
-        const isAnswered = Boolean(currentOption);
-        if (isAnswered) {
-          totalAnswered += 1;
-          if (currentOption === 'd24') {
-            member24Count += 1;
-            total24Headcount += groupHeadcount;
-          } else if (currentOption === 'd31') {
-            member31Count += 1;
-            total31Headcount += groupHeadcount;
-          } else if (currentOption === 'd_none') {
-            absentCount += 1;
-          }
-        }
 
-        const selectId = `select_member_${index}`;
-        const countId = `count_member_${index}`;
-        const btnId = `btn_confirm_${index}`;
+      roster.innerHTML = "";
 
-        return `
-          <div class="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 p-3 sm:p-3.5 rounded-2xl ${isAnswered ? 'bg-indigo-50/40 border border-indigo-100' : 'bg-white border border-slate-100'} hover:border-indigo-300 transition">
-            
-            <!-- Member Name -->
-            <div class="w-28 sm:w-32 font-extrabold text-sm sm:text-base text-slate-900 flex items-center gap-1.5 shrink-0">
-              <span class="text-xs text-slate-400 font-semibold">${index + 1}.</span>
-              <span>${name}</span>
-            </div>
 
-            <!-- Controls Group -->
-            <div class="flex items-center gap-2 flex-1 justify-end">
-              
-              <!-- Attendance Dropdown -->
-              <select id="${selectId}" ${expired && !isAdmin ? 'disabled' : ''} onchange="checkBlink(${index})"
-                class="bg-slate-50 border border-slate-200/90 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 cursor-pointer min-w-[125px] sm:min-w-[145px] ${(expired && !isAdmin) ? 'opacity-60 cursor-not-allowed' : ''}">
-                <option value="" ${currentOption === '' ? 'selected' : ''}>참석 여부 ∨</option>
-                <option value="d24" ${currentOption === 'd24' ? 'selected' : ''}>10/24(토) 참석</option>
-                <option value="d31" ${currentOption === 'd31' ? 'selected' : ''}>10/31(토) 참석</option>
-                <option value="d_none" ${currentOption === 'd_none' ? 'selected' : ''}>불참</option>
-              </select>
+      OFFICIAL_MEMBERS.forEach(name => {
 
-              <!-- Headcount Field (명) -->
-              <div class="relative w-16 sm:w-20 shrink-0">
-                <input type="number" id="${countId}" min="1" max="10" placeholder="명" value="${currentCountStr}" ${expired && !isAdmin ? 'disabled' : ''} oninput="checkBlink(${index})"
-                  class="w-full bg-slate-50 border border-slate-200/90 rounded-xl px-2.5 py-2 text-xs font-bold text-center text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 ${(expired && !isAdmin) ? 'opacity-60 cursor-not-allowed' : ''}">
-                <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-slate-400 pointer-events-none font-medium">명</span>
+        const vote =
+          votes[name] || {};
+
+
+        const option =
+          vote.option || "";
+
+
+        const count =
+          Number(vote.count || 1);
+
+
+        const disabled =
+          (!isAdmin && isExpired())
+            ? "disabled"
+            : "";
+
+
+        const row =
+          document.createElement("div");
+
+
+        row.className =
+          "p-4 md:p-5";
+
+
+        row.innerHTML = `
+
+          <div class="flex flex-col gap-4">
+
+            <div class="flex items-center justify-between">
+
+              <div class="flex items-center gap-3">
+
+                <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-black">
+                  ${name.charAt(0)}
+                </div>
+
+                <div>
+
+                  <div class="font-black text-gray-900">
+                    ${name}
+                  </div>
+
+                  ${
+                    vote.updatedAt
+                      ? `<div class="text-xs text-gray-400 mt-1">
+                           마지막 수정: ${formatDate(vote.updatedAt)}
+                         </div>`
+                      : `<div class="text-xs text-gray-400 mt-1">
+                           아직 투표하지 않음
+                         </div>`
+                  }
+
+                </div>
+
               </div>
 
-              <!-- Confirm Button (확인) -->
-              <button id="${btnId}" onclick="saveMemberRow('${name}', ${index})" ${expired && !isAdmin ? 'disabled' : ''}
-                class="${(expired && !isAdmin) ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : (isAnswered ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300')} px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition active:scale-95 shadow-2xs shrink-0">
-                ${(expired && !isAdmin) ? '마감' : '확인'}
+              ${
+                option
+                  ? `<span class="text-xs font-bold px-3 py-1 rounded-full ${getOptionBadgeClass(option)}">
+                       ${getOptionLabel(option)}
+                     </span>`
+                  : ""
+              }
+
+            </div>
+
+
+            <div class="grid grid-cols-3 gap-2">
+
+              <button
+                ${disabled}
+                onclick="saveMemberRow('${name}', '1024', ${count})"
+                class="option-btn ${
+                  option === "1024"
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "bg-white text-gray-700 border-gray-200"
+                } border rounded-xl py-3 px-2 text-sm font-bold hover:border-blue-400 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                📅 10/24
+              </button>
+
+
+              <button
+                ${disabled}
+                onclick="saveMemberRow('${name}', '1031', ${count})"
+                class="option-btn ${
+                  option === "1031"
+                    ? "bg-indigo-600 text-white border-indigo-600"
+                    : "bg-white text-gray-700 border-gray-200"
+                } border rounded-xl py-3 px-2 text-sm font-bold hover:border-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                📅 10/31
+              </button>
+
+
+              <button
+                ${disabled}
+                onclick="saveMemberRow('${name}', 'absent', 0)"
+                class="option-btn ${
+                  option === "absent"
+                    ? "bg-gray-600 text-white border-gray-600"
+                    : "bg-white text-gray-700 border-gray-200"
+                } border rounded-xl py-3 px-2 text-sm font-bold hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                ❌ 불참
               </button>
 
             </div>
+
+
+            ${
+              option === "1024" || option === "1031"
+                ? `
+                  <div class="flex items-center gap-3">
+
+                    <span class="text-sm text-gray-500">
+                      참석 인원
+                    </span>
+
+                    <select
+                      id="count_${encodeURIComponent(name)}"
+                      ${disabled}
+                      class="border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold disabled:opacity-50"
+                    >
+                      ${[1,2,3,4,5,6,7,8,9,10]
+                        .map(n =>
+                          `<option value="${n}" ${n === count ? "selected" : ""}>${n}명</option>`
+                        )
+                        .join("")
+                      }
+                    </select>
+
+                    <button
+                      ${disabled}
+                      onclick="saveMemberRowFromSelect('${name}')"
+                      class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-bold disabled:opacity-50"
+                    >
+                      확인
+                    </button>
+
+                  </div>
+                `
+                : ""
+            }
+
+
+            ${
+              option
+                ? `
+                  <div class="text-xs text-gray-400">
+                    마감 전에는 다른 날짜 또는 불참으로 다시 변경할 수 있습니다.
+                  </div>
+                `
+                : ""
+            }
+
           </div>
         `;
-      }).join('');
 
-      // 1. Top Card 1: 10.24(토) 선택 인원 (깨끗하게 메인 숫자만 표시)
-      document.getElementById('statDate24').textContent = total24Headcount;
 
-      // 2. Top Card 2: 10.31(토) 선택 인원 (깨끗하게 메인 숫자만 표시)
-      document.getElementById('statDate31').textContent = total31Headcount;
+        roster.appendChild(row);
 
-      // 3. Stat Card 1: 총 참석 인원 = 모든 날짜 참석 인원 합계
-      const totalAttendingHeadcount = total24Headcount + total31Headcount;
-      const totalAttendingMembers = member24Count + member31Count;
-      const unansweredCount = 16 - totalAttendingMembers - absentCount;
+      });
 
-      document.getElementById('statAttending').textContent = totalAttendingHeadcount;
-      const statAttendingSub = document.getElementById('statAttendingSub');
-      if (statAttendingSub) {
-        statAttendingSub.textContent = `회원 ${totalAttendingMembers} / 16`;
-      }
 
-      // 4. Stat Card 2: 불참 인원
-      document.getElementById('statAbsent').textContent = absentCount;
+      updateSummary();
 
-      // 5. Stat Card 3: 미응답
-      document.getElementById('statUnanswered').textContent = unansweredCount;
-
-      loadGlobalVenue();
     }
 
-    function saveMemberRow(name, index) {
-      if (isExpired() && !isAdmin) {
-        showToast('🔒 10월 21일(수) 23:59 마감 시간이 지나 수정할 수 없습니다.', 'error');
-        return;
+
+    /* =========================================================
+       날짜/불참 라벨
+    ========================================================= */
+
+    function getOptionLabel(option) {
+
+      if (option === "1024") {
+        return "10/24 참석";
       }
 
-      const selectEl = document.getElementById(`select_member_${index}`);
-      const countEl = document.getElementById(`count_member_${index}`);
-
-      const option = selectEl.value;
-      const count = countEl.value.trim();
-
-      if (!option) {
-        showToast(`⚠️ ${name} 회원님의 참석 여부를 선택해 주세요.`);
-        return;
+      if (option === "1031") {
+        return "10/31 참석";
       }
 
-      // 1인 1회 투표 제한 (관리자가 아닐 때 적용)
-      const myVoted = localStorage.getItem('oryang_my_voted_member');
-      if (!isAdmin && myVoted && myVoted !== name) {
-        alert(`⚠️ 1인 1회만 투표가 가능합니다.\n\n이미 [${myVoted}] 회원 항목으로 투표가 완료되었습니다.`);
-        showToast(`⚠️ 1인 1회만 투표 가능합니다. (기존: ${myVoted})`, 'error');
-        return;
+      if (option === "absent") {
+        return "불참";
       }
 
-      const votes = getVotes();
-      votes[name] = { option, count, updatedAt: new Date().toISOString() };
-      saveVotes(votes);
+      return "";
 
-      if (!isAdmin) {
-        localStorage.setItem('oryang_my_voted_member', name);
-      }
-
-      // 깜빡임 효과 제거
-      const btn = document.getElementById(`btn_confirm_${index}`);
-      if (btn) btn.classList.remove('btn-blink');
-
-      renderRoster();
-
-      let optionText = '불참';
-      if (option === 'd24') optionText = '10/24(토) 참석';
-      else if (option === 'd31') optionText = '10/31(토) 참석';
-
-      const dispHeadcount = count ? count + '명' : '1명';
-      showToast(`✅ ${name} 회원님: [${optionText}${option !== 'd_none' ? ', 총 ' + dispHeadcount : ''}] 등록 완료!`);
     }
 
-    // Global Single Venue Recommendation Functions
-    function saveGlobalVenue() {
-      const input = document.getElementById('globalVenueInput');
-      const val = input.value.trim();
-      if (!val) {
-        showToast('⚠️ 장소 추천 의견을 입력해 주세요.');
-        return;
+
+    function getOptionBadgeClass(option) {
+
+      if (option === "1024") {
+        return "bg-blue-100 text-blue-700";
       }
-      localStorage.setItem('oryang_global_venue_opinion', val);
-      loadGlobalVenue();
-      showToast('✨ 장소 추천 의견이 저장되었습니다!');
+
+      if (option === "1031") {
+        return "bg-indigo-100 text-indigo-700";
+      }
+
+      if (option === "absent") {
+        return "bg-gray-100 text-gray-600";
+      }
+
+      return "";
+
     }
+
+
+    /* =========================================================
+       날짜 표시
+    ========================================================= */
+
+    function formatDate(value) {
+
+      if (!value) return "";
+
+
+      const date =
+        new Date(value);
+
+
+      if (Number.isNaN(date.getTime())) {
+        return "";
+      }
+
+
+      return date.toLocaleString(
+        "ko-KR",
+        {
+          month: "numeric",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       회원 투표 저장
+    ========================================================= */
+
+    async function saveMemberRow(
+      name,
+      option,
+      count = 1
+    ) {
+
+      if (!isAdmin && isExpired()) {
+
+        toast(
+          "⏰ 투표 수정 마감 시간이 지났습니다."
+        );
+
+        return;
+
+      }
+
+
+      if (!OFFICIAL_MEMBERS.includes(name)) {
+
+        toast("회원 정보를 확인할 수 없습니다.");
+
+        return;
+
+      }
+
+
+      let finalCount =
+        Number(count || 1);
+
+
+      if (option === "absent") {
+
+        finalCount = 0;
+
+      } else {
+
+        if (
+          !Number.isInteger(finalCount) ||
+          finalCount < 1 ||
+          finalCount > 10
+        ) {
+
+          finalCount = 1;
+
+        }
+
+      }
+
+
+      try {
+
+        await set(
+          ref(db, `meet2026/votes/${name}`),
+          {
+            option: option,
+            count: finalCount,
+            updatedAt: new Date().toISOString()
+          }
+        );
+
+
+        toast(
+          `✅ ${name}님의 투표가 저장되었습니다.`
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+        toast(
+          "❌ 저장에 실패했습니다. 인터넷 연결을 확인해주세요."
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       참석 인원 변경
+    ========================================================= */
+
+    async function saveMemberRowFromSelect(name) {
+
+      if (!isAdmin && isExpired()) {
+
+        toast(
+          "⏰ 투표 수정 마감 시간이 지났습니다."
+        );
+
+        return;
+
+      }
+
+
+      const id =
+        `count_${encodeURIComponent(name)}`;
+
+
+      const select =
+        document.getElementById(id);
+
+
+      if (!select) {
+
+        toast("참석 인원 선택값을 찾을 수 없습니다.");
+
+        return;
+
+      }
+
+
+      const current =
+        getVotes()[name];
+
+
+      if (!current || !current.option) {
+
+        toast("먼저 참석 날짜를 선택해주세요.");
+
+        return;
+
+      }
+
+
+      const count =
+        Number(select.value);
+
+
+      await saveMemberRow(
+        name,
+        current.option,
+        count
+      );
+
+    }
+
+
+    /* =========================================================
+       장소 의견 저장
+    ========================================================= */
+
+    async function saveGlobalVenue() {
+
+      if (!isAdmin && isExpired()) {
+
+        toast(
+          "⏰ 장소 의견 수정 마감 시간이 지났습니다."
+        );
+
+        return;
+
+      }
+
+
+      const input =
+        document.getElementById("venueInput");
+
+
+      const value =
+        input.value.trim();
+
+
+      if (!value) {
+
+        toast("장소 의견을 입력해주세요.");
+
+        return;
+
+      }
+
+
+      try {
+
+        await set(
+          venueRef,
+          value
+        );
+
+
+        toast(
+          "📍 장소 의견이 저장되었습니다."
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+        toast(
+          "❌ 장소 의견 저장에 실패했습니다."
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       장소 의견 화면
+    ========================================================= */
 
     function loadGlobalVenue() {
-      const val = localStorage.getItem('oryang_global_venue_opinion');
-      const display = document.getElementById('savedVenueDisplay');
-      const text = document.getElementById('savedVenueText');
-      const input = document.getElementById('globalVenueInput');
-      if (val) {
-        text.textContent = val;
-        display.classList.remove('hidden');
-        if (input) input.value = val;
+
+      const display =
+        document.getElementById("venueDisplay");
+
+      const text =
+        document.getElementById("venueText");
+
+      const input =
+        document.getElementById("venueInput");
+
+
+      if (!firebaseVenue) {
+
+        display.classList.add("hidden");
+
+        text.textContent = "";
+
+        input.value = "";
+
+        return;
+
       }
+
+
+      display.classList.remove("hidden");
+
+      text.textContent =
+        firebaseVenue;
+
+      input.value =
+        firebaseVenue;
+
     }
 
-    function showToast(msg, type = 'normal') {
-      const toast = document.getElementById('toast');
-      const toastIcon = document.getElementById('toastIcon');
-      
-      toastIcon.textContent = type === 'error' ? '❌' : '📋';
-      document.getElementById('toastMsg').textContent = msg;
-      
-      if (type === 'error') {
-        toast.classList.remove('bg-slate-900');
-        toast.classList.add('bg-rose-900');
-      } else {
-        toast.classList.remove('bg-rose-900');
-        toast.classList.add('bg-slate-900');
+
+    /* =========================================================
+       관리자 로그인
+    ========================================================= */
+
+    function openAdminModal() {
+
+      if (isAdmin) {
+
+        document
+          .getElementById("adminTools")
+          .classList.remove("hidden");
+
+        return;
+
       }
 
-      toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
-      toast.classList.add('opacity-100', 'translate-y-0');
+
+      document
+        .getElementById("adminModal")
+        .classList.remove("hidden");
+
 
       setTimeout(() => {
-        toast.classList.remove('opacity-100', 'translate-y-0');
-        toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
-      }, 3500);
+
+        document
+          .getElementById("adminPassword")
+          .focus();
+
+      }, 100);
+
     }
 
-    function copyLink() {
-      const url = window.location.href;
-      navigator.clipboard.writeText(url).then(() => {
-        showToast('📋 링크가 클립보드에 복사되었습니다!');
-      }).catch(() => {
-        showToast('📋 링크: ' + url);
-      });
+
+    function closeAdminModal() {
+
+      document
+        .getElementById("adminModal")
+        .classList.add("hidden");
+
+
+      document
+        .getElementById("adminPassword")
+        .value = "";
+
     }
+
+
+    function submitAdminPassword() {
+
+      const password =
+        document
+          .getElementById("adminPassword")
+          .value;
+
+
+      if (password !== ADMIN_PASSWORD) {
+
+        toast("❌ 관리자 비밀번호가 틀렸습니다.");
+
+        return;
+
+      }
+
+
+      isAdmin = true;
+
+
+      closeAdminModal();
+
+
+      document
+        .getElementById("adminBanner")
+        .classList.remove("hidden");
+
+
+      document
+        .getElementById("adminTools")
+        .classList.remove("hidden");
+
+
+      renderRoster();
+
+
+      toast("🔐 관리자 로그인되었습니다.");
+
+    }
+
+
+    /* =========================================================
+       관리자 로그아웃
+    ========================================================= */
+
+    function logoutAdmin() {
+
+      isAdmin = false;
+
+
+      document
+        .getElementById("adminBanner")
+        .classList.add("hidden");
+
+
+      document
+        .getElementById("adminTools")
+        .classList.add("hidden");
+
+
+      renderRoster();
+
+
+      toast("관리자 로그아웃되었습니다.");
+
+    }
+
+
+    /* =========================================================
+       전체 투표 초기화
+    ========================================================= */
+
+    async function resetAllVotes() {
+
+      if (!isAdmin) {
+
+        toast("관리자 로그인이 필요합니다.");
+
+        return;
+
+      }
+
+
+      const ok =
+        confirm(
+          "정말 모든 회원의 투표와 장소 의견을 초기화하시겠습니까?"
+        );
+
+
+      if (!ok) {
+        return;
+      }
+
+
+      try {
+
+        await remove(
+          ref(db, "meet2026")
+        );
+
+
+        toast(
+          "🗑️ 전체 투표가 초기화되었습니다."
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+        toast(
+          "❌ 전체 초기화에 실패했습니다."
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       링크 복사
+    ========================================================= */
+
+    async function copyLink() {
+
+      try {
+
+        await navigator.clipboard.writeText(
+          window.location.href
+        );
+
+
+        toast(
+          "🔗 투표 링크가 복사되었습니다."
+        );
+
+      } catch (error) {
+
+        prompt(
+          "아래 링크를 복사해주세요.",
+          window.location.href
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       카카오톡 공유
+    ========================================================= */
 
     function shareKakao() {
-      copyLink();
-      alert('카카오톡 공유 안내:\n\n링크가 클립보드에 복사되었습니다! 오량 형제계 단톡방에 붙여넣기(Ctrl+V)하여 공유해 주세요. 🍁');
+
+      const url =
+        window.location.href;
+
+
+      const text =
+        "오량 형제계 2026년 모임 참석 투표입니다.\n\n10월 24일 또는 10월 31일 참석 여부를 선택해주세요.\n\n" +
+        url;
+
+
+      if (navigator.share) {
+
+        navigator.share({
+
+          title:
+            "오량 형제계 2026년 모임 참석 투표",
+
+          text:
+            text,
+
+          url:
+            url
+
+        }).catch(() => {});
+
+      } else {
+
+        navigator.clipboard
+          .writeText(text)
+          .then(() => {
+
+            toast(
+              "💬 공유 내용이 복사되었습니다. 카카오톡에 붙여넣어 주세요."
+            );
+
+          })
+          .catch(() => {
+
+            prompt(
+              "아래 내용을 복사해주세요.",
+              text
+            );
+
+          });
+
+      }
+
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      renderRoster();
-    });
+
+    /* =========================================================
+       Firebase 실시간 감시
+    ========================================================= */
+
+    onValue(
+      votesRef,
+
+      snapshot => {
+
+        firebaseVotes =
+          snapshot.val() || {};
+
+
+        renderRoster();
+
+
+        setFirebaseStatus(
+          "🟢 실시간 연결됨 · 회원 투표 결과가 자동으로 공유됩니다.",
+          "success"
+        );
+
+      },
+
+      error => {
+
+        console.error(error);
+
+        setFirebaseStatus(
+          "🔴 Firebase 연결 오류가 발생했습니다. 인터넷 또는 데이터베이스 설정을 확인해주세요.",
+          "error"
+        );
+
+      }
+    );
+
+
+    onValue(
+      venueRef,
+
+      snapshot => {
+
+        firebaseVenue =
+          snapshot.val() || "";
+
+
+        loadGlobalVenue();
+
+      },
+
+      error => {
+
+        console.error(error);
+
+      }
+    );
+
+
+    /* =========================================================
+       마감 시간 화면
+    ========================================================= */
+
+    function updateDeadlineDisplay() {
+
+      const el =
+        document.getElementById("deadlineText");
+
+
+      if (!el) return;
+
+
+      if (isExpired() && !isAdmin) {
+
+        el.textContent =
+          "🔒 투표 수정 마감됨 · 2026년 10월 11일 23:59";
+
+
+        el.className =
+          "inline-block bg-gray-100 text-gray-500 border border-gray-200 rounded-full px-5 py-2 text-sm font-bold";
+
+      } else {
+
+        el.textContent =
+          "⏰ 수정 마감: 2026년 10월 11일 23:59";
+
+
+        el.className =
+          "inline-block bg-red-50 text-red-600 border border-red-100 rounded-full px-5 py-2 text-sm font-bold";
+
+      }
+
+    }
+
+
+    /* =========================================================
+       초기 실행
+    ========================================================= */
+
+    updateDeadlineDisplay();
+
+
+    setInterval(
+      updateDeadlineDisplay,
+      1000
+    );
+
+
+    /* =========================================================
+       HTML onclick에서 사용할 수 있도록 전역 등록
+    ========================================================= */
+
+    window.openAdminModal =
+      openAdminModal;
+
+    window.closeAdminModal =
+      closeAdminModal;
+
+    window.submitAdminPassword =
+      submitAdminPassword;
+
+    window.logoutAdmin =
+      logoutAdmin;
+
+    window.resetAllVotes =
+      resetAllVotes;
+
+    window.saveMemberRow =
+      saveMemberRow;
+
+    window.saveMemberRowFromSelect =
+      saveMemberRowFromSelect;
+
+    window.saveGlobalVenue =
+      saveGlobalVenue;
+
+    window.copyLink =
+      copyLink;
+
+    window.shareKakao =
+      shareKakao;
+
   </script>
+
 </body>
 </html>
