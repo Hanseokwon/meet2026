@@ -161,7 +161,7 @@
         <div class="text-xs font-extrabold text-indigo-900 mb-2.5 flex items-center justify-between">
           <div class="flex items-center gap-1.5">
             <span class="text-sm">🗓️</span>
-            <span>날짜별 참석 희망 현황</span>
+            <span>날짜별 참석 인원 취합</span>
           </div>
           <span class="text-[10px] text-indigo-500 font-semibold">(실시간 집계)</span>
         </div>
@@ -192,17 +192,17 @@
         </div>
       </div>
 
-      <!-- Stat Dashboard Cards (3 Cards: 참석 명수, 불참 인원, 미응답) -->
+      <!-- Stat Dashboard Cards (3 Cards: 총 참석 인원, 불참 인원, 미응답) -->
       <div class="p-4 sm:p-5 bg-white border-b border-slate-100">
         <div class="grid grid-cols-3 gap-3 text-center">
           
-          <!-- Card 1: 참석 명수 (Soft Blue) -->
+          <!-- Card 1: 총 참석 인원 (Soft Blue) -->
           <div class="bg-blue-50/80 border border-blue-100 rounded-2xl p-4 shadow-2xs flex flex-col justify-center items-center">
-            <div class="text-xs font-bold text-blue-600 mb-1">참석 명수</div>
+            <div class="text-xs font-bold text-blue-600 mb-1">총 참석 인원</div>
             <div class="text-2xl sm:text-3xl font-black text-blue-900 leading-none">
               <span id="statAttending">0</span><span class="text-lg sm:text-xl">명</span>
             </div>
-            <div class="text-xs text-slate-400 font-normal mt-1">/ 16</div>
+            <div class="text-xs text-slate-400 font-normal mt-1" id="statAttendingSub">회원 0 / 16</div>
           </div>
 
           <!-- Card 2: 불참 인원 (Soft Red/Pink) -->
@@ -388,9 +388,6 @@
         const currentOption = v.option || '';
         const currentCountStr = (v.count || '').trim();
         
-        // Exact Headcount Calculation:
-        // Input number typed (e.g. 1, 2, 3) IS the total headcount for this member's group!
-        // If empty or 0, default headcount is 1 (the member themselves).
         let groupHeadcount = 1;
         if (currentCountStr !== '') {
           const parsed = parseInt(currentCountStr, 10);
@@ -456,25 +453,35 @@
         `;
       }).join('');
 
-      // Update 10.24 & 10.31 Date Attendance Headcounts
+      // 1. Top Card 1: 10.24(토) 참석 인원 = 10.24 날짜 선택 인원 총 취합
       document.getElementById('statDate24').textContent = total24Headcount;
       const sub24 = document.getElementById('subDate24');
       if (sub24) {
         sub24.textContent = member24Count > 0 ? `(선택 회원 ${member24Count}명)` : '';
       }
 
+      // 2. Top Card 2: 10.31(토) 참석 인원 = 10.31 날짜 선택 인원 총 취합
       document.getElementById('statDate31').textContent = total31Headcount;
       const sub31 = document.getElementById('subDate31');
       if (sub31) {
         sub31.textContent = member31Count > 0 ? `(선택 회원 ${member31Count}명)` : '';
       }
 
-      // Update 3 Stat Cards (참석 명수 = 10/24 회원 + 10/31 회원)
+      // 3. Stat Card 1: 총 참석 인원 = 모든 날짜 참석 인원의 총 합계
+      const totalAttendingHeadcount = total24Headcount + total31Headcount;
       const totalAttendingMembers = member24Count + member31Count;
       const unansweredCount = 16 - totalAttendingMembers - absentCount;
 
-      document.getElementById('statAttending').textContent = totalAttendingMembers;
+      document.getElementById('statAttending').textContent = totalAttendingHeadcount;
+      const statAttendingSub = document.getElementById('statAttendingSub');
+      if (statAttendingSub) {
+        statAttendingSub.textContent = `회원 ${totalAttendingMembers} / 16`;
+      }
+
+      // 4. Stat Card 2: 불참 인원
       document.getElementById('statAbsent').textContent = absentCount;
+
+      // 5. Stat Card 3: 미응답
       document.getElementById('statUnanswered').textContent = unansweredCount;
 
       loadGlobalVenue();
